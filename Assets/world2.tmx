@@ -1,128 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="1">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="24">
  <tileset firstgid="1" name="RPGpack" tilewidth="32" tileheight="32" tilecount="1040" columns="40">
   <image source="RPGpack.png" width="1280" height="832"/>
   <terraintypes>
-   <terrain name="Grass" tile="82"/>
-   <terrain name="Water" tile="102"/>
-   <terrain name="Ground" tile="92"/>
+   <terrain name="Grass" tile="122"/>
+   <terrain name="Terrain" tile="132"/>
+   <terrain name="Water" tile="142"/>
   </terraintypes>
-  <tile id="0" terrain="2,2,2,0"/>
-  <tile id="1" terrain="2,2,0,0"/>
-  <tile id="2" terrain="2,2,0,0"/>
-  <tile id="3" terrain="2,2,0,0"/>
-  <tile id="4" terrain="2,2,0,0"/>
-  <tile id="5" terrain="2,2,0,2"/>
-  <tile id="10" terrain=",,,2"/>
-  <tile id="11" terrain=",,2,2"/>
-  <tile id="12" terrain=",,2,2"/>
-  <tile id="13" terrain=",,2,2"/>
-  <tile id="14" terrain=",,2,2"/>
-  <tile id="15" terrain=",,2,"/>
-  <tile id="20" terrain="0,0,0,1"/>
-  <tile id="21" terrain="0,0,1,1"/>
-  <tile id="22" terrain="0,0,1,1"/>
-  <tile id="23" terrain="0,0,1,1"/>
-  <tile id="24" terrain="0,0,1,1"/>
-  <tile id="25" terrain="0,0,1,0"/>
-  <tile id="40" terrain="2,0,2,0"/>
+  <tile id="0" terrain="1,1,1,0"/>
+  <tile id="1" terrain="1,1,0,0"/>
+  <tile id="2" terrain="1,1,0,0"/>
+  <tile id="3" terrain="1,1,0,0"/>
+  <tile id="4" terrain="1,1,0,0"/>
+  <tile id="5" terrain="1,1,0,1"/>
+  <tile id="10" terrain="0,0,0,1"/>
+  <tile id="11" terrain="0,0,1,1"/>
+  <tile id="12" terrain="0,0,1,1"/>
+  <tile id="13" terrain="0,0,1,1"/>
+  <tile id="14" terrain="0,0,1,1"/>
+  <tile id="15" terrain="0,0,1,0"/>
+  <tile id="20" terrain="0,0,0,2"/>
+  <tile id="21" terrain="0,0,2,2"/>
+  <tile id="22" terrain="0,0,2,2"/>
+  <tile id="23" terrain="0,0,2,2"/>
+  <tile id="24" terrain="0,0,2,2"/>
+  <tile id="25" terrain="0,0,2,0"/>
+  <tile id="40" terrain="1,0,1,0"/>
   <tile id="41" terrain="0,0,0,0"/>
   <tile id="42" terrain="0,0,0,0"/>
   <tile id="43" terrain="0,0,0,0"/>
   <tile id="44" terrain="0,0,0,0"/>
-  <tile id="45" terrain="0,2,0,2"/>
-  <tile id="47" terrain="0,0,0,2"/>
-  <tile id="48" terrain="0,0,2,0"/>
-  <tile id="50" terrain=",2,,2"/>
-  <tile id="51" terrain="2,2,2,2"/>
-  <tile id="52" terrain="2,2,2,2"/>
-  <tile id="53" terrain="2,2,2,2"/>
-  <tile id="54" terrain="2,2,2,2"/>
-  <tile id="55" terrain="2,,2,"/>
-  <tile id="60" terrain="0,1,0,1"/>
-  <tile id="61" terrain="1,1,1,1"/>
-  <tile id="62" terrain="1,1,1,1"/>
-  <tile id="63" terrain="1,1,1,1"/>
-  <tile id="64" terrain="1,1,1,1"/>
-  <tile id="65" terrain="1,0,1,0"/>
-  <tile id="67" terrain="1,1,1,0"/>
-  <tile id="68" terrain="1,1,0,1"/>
-  <tile id="80" terrain="2,0,2,0"/>
+  <tile id="45" terrain="0,1,0,1"/>
+  <tile id="47" terrain="0,0,0,1"/>
+  <tile id="48" terrain="0,0,1,0"/>
+  <tile id="50" terrain="0,1,0,1"/>
+  <tile id="51" terrain="1,1,1,1"/>
+  <tile id="52" terrain="1,1,1,1"/>
+  <tile id="53" terrain="1,1,1,1"/>
+  <tile id="54" terrain="1,1,1,1"/>
+  <tile id="55" terrain="1,0,1,0"/>
+  <tile id="57" terrain="1,1,1,0"/>
+  <tile id="58" terrain="1,1,0,1"/>
+  <tile id="60" terrain="0,2,0,2"/>
+  <tile id="61" terrain="2,2,2,2"/>
+  <tile id="62" terrain="2,2,2,2"/>
+  <tile id="63" terrain="2,2,2,2"/>
+  <tile id="64" terrain="2,2,2,2"/>
+  <tile id="65" terrain="2,0,2,0"/>
+  <tile id="67" terrain="2,2,2,0"/>
+  <tile id="68" terrain="2,2,0,2"/>
+  <tile id="80" terrain="1,0,1,0"/>
   <tile id="81" terrain="0,0,0,0"/>
   <tile id="82" terrain="0,0,0,0"/>
   <tile id="83" terrain="0,0,0,0"/>
   <tile id="84" terrain="0,0,0,0"/>
-  <tile id="85" terrain="0,2,0,2"/>
-  <tile id="87" terrain="0,2,0,0"/>
-  <tile id="88" terrain="2,0,0,0"/>
-  <tile id="90" terrain=",2,,2"/>
-  <tile id="91" terrain="2,2,2,2"/>
-  <tile id="92" terrain="2,2,2,2"/>
-  <tile id="93" terrain="2,2,2,2"/>
-  <tile id="94" terrain="2,2,2,2"/>
-  <tile id="95" terrain="2,,2,"/>
-  <tile id="100" terrain="0,1,0,1"/>
-  <tile id="101" terrain="1,1,1,1"/>
-  <tile id="102" terrain="1,1,1,1"/>
-  <tile id="103" terrain="1,1,1,1"/>
-  <tile id="104" terrain="1,1,1,1"/>
-  <tile id="105" terrain="1,0,1,0"/>
-  <tile id="107" terrain="1,0,1,1"/>
-  <tile id="108" terrain="0,1,1,1"/>
-  <tile id="120" terrain="2,0,2,0"/>
+  <tile id="85" terrain="0,1,0,1"/>
+  <tile id="87" terrain="0,1,0,0"/>
+  <tile id="88" terrain="1,0,0,0"/>
+  <tile id="90" terrain="0,1,0,1"/>
+  <tile id="91" terrain="1,1,1,1"/>
+  <tile id="92" terrain="1,1,1,1"/>
+  <tile id="93" terrain="1,1,1,1"/>
+  <tile id="94" terrain="1,1,1,1"/>
+  <tile id="95" terrain="1,0,1,0"/>
+  <tile id="97" terrain="1,0,1,1"/>
+  <tile id="98" terrain="0,1,1,1"/>
+  <tile id="100" terrain="0,2,0,2"/>
+  <tile id="101" terrain="2,2,2,2"/>
+  <tile id="102" terrain="2,2,2,2"/>
+  <tile id="103" terrain="2,2,2,2"/>
+  <tile id="104" terrain="2,2,2,2"/>
+  <tile id="105" terrain="2,0,2,0"/>
+  <tile id="107" terrain="2,0,2,2"/>
+  <tile id="108" terrain="0,2,2,2"/>
+  <tile id="120" terrain="1,0,1,0"/>
   <tile id="121" terrain="0,0,0,0"/>
   <tile id="122" terrain="0,0,0,0"/>
   <tile id="123" terrain="0,0,0,0"/>
   <tile id="124" terrain="0,0,0,0"/>
-  <tile id="125" terrain="0,2,0,2"/>
-  <tile id="130" terrain=",2,,2"/>
-  <tile id="131" terrain="2,2,2,2"/>
-  <tile id="132" terrain="2,2,2,2"/>
-  <tile id="133" terrain="2,2,2,2"/>
-  <tile id="134" terrain="2,2,2,2"/>
-  <tile id="135" terrain="2,,2,"/>
-  <tile id="140" terrain="0,1,0,1"/>
-  <tile id="141" terrain="1,1,1,1"/>
-  <tile id="142" terrain="1,1,1,1"/>
-  <tile id="143" terrain="1,1,1,1"/>
-  <tile id="144" terrain="1,1,1,1"/>
-  <tile id="145" terrain="1,0,1,0"/>
-  <tile id="160" terrain="2,0,2,0"/>
+  <tile id="125" terrain="0,1,0,1"/>
+  <tile id="130" terrain="0,1,0,1"/>
+  <tile id="131" terrain="1,1,1,1"/>
+  <tile id="132" terrain="1,1,1,1"/>
+  <tile id="133" terrain="1,1,1,1"/>
+  <tile id="134" terrain="1,1,1,1"/>
+  <tile id="135" terrain="1,0,1,0"/>
+  <tile id="140" terrain="0,2,0,2"/>
+  <tile id="141" terrain="2,2,2,2"/>
+  <tile id="143" terrain="2,2,2,2"/>
+  <tile id="144" terrain="2,2,2,2"/>
+  <tile id="145" terrain="2,0,2,0"/>
+  <tile id="160" terrain="1,0,1,0"/>
   <tile id="161" terrain="0,0,0,0"/>
   <tile id="162" terrain="0,0,0,0"/>
   <tile id="163" terrain="0,0,0,0"/>
   <tile id="164" terrain="0,0,0,0"/>
-  <tile id="165" terrain="0,2,0,2"/>
-  <tile id="170" terrain=",2,,2"/>
-  <tile id="171" terrain="2,2,2,2"/>
-  <tile id="172" terrain="2,2,2,2"/>
-  <tile id="173" terrain="2,2,2,2"/>
-  <tile id="174" terrain="2,2,2,2"/>
-  <tile id="175" terrain="2,,2,"/>
-  <tile id="180" terrain="0,1,0,1"/>
-  <tile id="181" terrain="1,1,1,1"/>
-  <tile id="182" terrain="1,1,1,1"/>
-  <tile id="183" terrain="1,1,1,1"/>
-  <tile id="184" terrain="1,1,1,1"/>
-  <tile id="185" terrain="1,0,1,0"/>
-  <tile id="200" terrain="2,0,2,2"/>
-  <tile id="201" terrain="0,0,2,2"/>
-  <tile id="202" terrain="0,0,2,2"/>
-  <tile id="203" terrain="0,0,2,2"/>
-  <tile id="204" terrain="0,0,2,2"/>
-  <tile id="205" terrain="0,2,2,2"/>
-  <tile id="210" terrain=",2,,"/>
-  <tile id="211" terrain="2,2,,"/>
-  <tile id="212" terrain="2,2,,"/>
-  <tile id="213" terrain="2,2,,"/>
-  <tile id="214" terrain="2,2,,"/>
-  <tile id="215" terrain="2,,,"/>
-  <tile id="220" terrain="0,1,0,0"/>
-  <tile id="221" terrain="1,1,0,0"/>
-  <tile id="222" terrain="1,1,0,0"/>
-  <tile id="223" terrain="1,1,0,0"/>
-  <tile id="224" terrain="1,1,0,0"/>
-  <tile id="225" terrain="1,0,0,0"/>
+  <tile id="165" terrain="0,1,0,1"/>
+  <tile id="170" terrain="0,1,0,1"/>
+  <tile id="171" terrain="1,1,1,1"/>
+  <tile id="172" terrain="1,1,1,1"/>
+  <tile id="173" terrain="1,1,1,1"/>
+  <tile id="174" terrain="1,1,1,1"/>
+  <tile id="175" terrain="1,0,1,0"/>
+  <tile id="180" terrain="0,2,0,2"/>
+  <tile id="181" terrain="2,2,2,2"/>
+  <tile id="182" terrain="2,2,2,2"/>
+  <tile id="183" terrain="2,2,2,2"/>
+  <tile id="184" terrain="2,2,2,2"/>
+  <tile id="185" terrain="2,0,2,0"/>
+  <tile id="200" terrain="1,0,1,1"/>
+  <tile id="201" terrain="0,0,1,1"/>
+  <tile id="202" terrain="0,0,1,1"/>
+  <tile id="203" terrain="0,0,1,1"/>
+  <tile id="204" terrain="0,0,1,1"/>
+  <tile id="205" terrain="0,1,1,1"/>
+  <tile id="210" terrain="0,1,0,0"/>
+  <tile id="211" terrain="1,1,0,0"/>
+  <tile id="212" terrain="1,1,0,0"/>
+  <tile id="213" terrain="1,1,0,0"/>
+  <tile id="214" terrain="1,1,0,0"/>
+  <tile id="215" terrain="1,0,0,0"/>
+  <tile id="220" terrain="0,2,0,0"/>
+  <tile id="221" terrain="2,2,0,0"/>
+  <tile id="222" terrain="2,2,0,0"/>
+  <tile id="223" terrain="2,2,0,0"/>
+  <tile id="224" terrain="2,2,0,0"/>
+  <tile id="225" terrain="2,0,0,0"/>
  </tileset>
  <layer id="1" name="World" width="30" height="30">
   <data encoding="csv">
@@ -158,6 +161,23 @@
 201,202,205,203,204,204,204,204,202,203,203,202,205,205,204,202,202,202,204,203,202,202,205,202,203,203,203,204,204,206
 </data>
  </layer>
+ <objectgroup id="7" name="object">
+  <object id="6" type="transport" x="559.13" y="684.743" width="35.2328" height="49.7855"/>
+  <object id="7" type="water" x="430.453" y="171.569" width="193.015" height="104.933"/>
+  <object id="8" type="water" x="366.115" y="195.312" width="62.8064" height="176.164"/>
+  <object id="9" type="water" x="295.65" y="267.31" width="68.9338" height="74.2953"/>
+  <object id="10" type="water" x="337.01" y="230.545" width="28.3395" height="35.9988"/>
+  <object id="13" type="water" x="430.453" y="278.799" width="144.761" height="35.2328"/>
+  <object id="14" type="water" x="429.688" y="315.564" width="36.7647" height="55.1471"/>
+  <object id="15" type="water" x="467.984" y="316.33" width="65.1042" height="26.8076"/>
+  <object id="17" type="house" x="513.855" y="539.335" width="32.9122" height="194.288"/>
+  <object id="18" type="house" x="546.767" y="513.855" width="59.4543" height="169.869"/>
+  <object id="19" type="house" x="603.036" y="540.397" width="38.2206" height="195.35"/>
+  <object id="20" type="house" x="513.855" y="527.657" width="112.538" height="13.8019"/>
+  <object id="21" type="house" x="543.582" y="480.943" width="59.4543" height="45.6524"/>
+  <object id="22" type="house" x="605.16" y="512.793" width="20.172" height="11.6785"/>
+  <object id="23" type="house" x="524.472" y="511.732" width="18.0486" height="15.9253"/>
+ </objectgroup>
  <layer id="5" name="Tile Layer 2" width="30" height="30">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

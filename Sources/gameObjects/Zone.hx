@@ -4,7 +4,7 @@ import com.framework.utils.Entity;
 import com.collision.platformer.CollisionBox;
 import com.gEngine.display.Layer;
 
-class TransportZone extends Entity {
+class Zone extends Entity {
 	public var collider:CollisionBox;
 
 	public function new(x:Float, y:Float, width:Float, height:Float) {

@@ -8,6 +8,7 @@ class GlobalGameData {
     public static var player:Hero;
     public static var simulationLayer:Layer;
     public static var camera:Camera;
+    public static var levelNumber:Int=1;
 
     public static function destroy() {
         player=null;

@@ -31,7 +31,7 @@ import com.gEngine.display.StaticLayer;
 import com.gEngine.display.Text;
 import com.loading.basicResources.FontLoader;
 import com.gEngine.display.Sprite;
-import gameObjects.TransportZone;
+import gameObjects.Zone;
 
 class GameState extends State {
 	// var screenWidth:Int;
@@ -43,10 +43,15 @@ class GameState extends State {
 	var score:Int = 0;
 	var hudLayer:StaticLayer;
 	var transportZone:CollisionGroup;
+	var waterZone:CollisionGroup;
+	var objects:CollisionGroup;
+
 	override function load(resources:Resources) {
-		resources.add(new DataLoader("world_tmx"));
-		var atlas = new JoinAtlas(2048, 2048);
+		resources.add(new DataLoader("world" + GGD.levelNumber + "_tmx"));
+		var atlas = new JoinAtlas(3072, 3072);
 		atlas.add(new TilesheetLoader("RPGpack", 32, 32, 0));
+		atlas.add(new TilesheetLoader("inside", 32, 32, 0));
+		// atlas.add(new TilesheetLoader("58032", 16, 16, 0));
 		atlas.add(new FontLoader("KenneyThick", 30));
 		atlas.add(new SpriteSheetLoader("characters", 32, 32, 0, [
 			new Sequence("idle", [51]),
@@ -59,16 +64,25 @@ class GameState extends State {
 
 	override function init() {
 		GGD.simulationLayer = new Layer();
-		// transportZone = new CollisionBox();
-		// transportZone=new TransportZone(0,0,0,0);
-		transportZone=new CollisionGroup();
-		world = new Tilemap("world_tmx", 1);
-		world.init(function(layerTilemap, tileLayer) {
-			if (!tileLayer.properties.exists("noCollision")) {
-				layerTilemap.createCollisions(tileLayer);
-			}
-			GGD.simulationLayer.addChild(layerTilemap.createDisplay(tileLayer, new Sprite("RPGpack")));
-		}, parseMapObjects);
+		transportZone = new CollisionGroup();
+		waterZone = new CollisionGroup();
+		objects = new CollisionGroup();
+		world = new Tilemap("world" + GGD.levelNumber + "_tmx", 1);
+		if (GGD.levelNumber == 3) {
+			world.init(function(layerTilemap, tileLayer) {
+				if (!tileLayer.properties.exists("noCollision")) {
+					layerTilemap.createCollisions(tileLayer);
+				}
+				GGD.simulationLayer.addChild(layerTilemap.createDisplay(tileLayer, new Sprite("inside")));
+			}, parseMapObjects);			
+		} else {
+			world.init(function(layerTilemap, tileLayer) {
+				if (!tileLayer.properties.exists("noCollision")) {
+					layerTilemap.createCollisions(tileLayer);
+				}
+				GGD.simulationLayer.addChild(layerTilemap.createDisplay(tileLayer, new Sprite("RPGpack")));
+			}, parseMapObjects);
+		}
 		stage.addChild(GGD.simulationLayer);
 		hero = new Hero(200, 750, GGD.simulationLayer);
 		createTouchJoystick();
@@ -80,9 +94,17 @@ class GameState extends State {
 	function parseMapObjects(layerTilemap:Tilemap, object:TmxObject) {
 		switch (object.objectType) {
 			case OTRectangle:
-				if (object.type == "transport") {			
-					var transport = new TransportZone(object.x, object.y, object.width, object.height);
+				if (object.type == "transport") {
+					var transport = new Zone(object.x, object.y, object.width, object.height);
 					transportZone.add(transport.collider);
+				}
+				if (object.type == "water") {
+					var water = new Zone(object.x, object.y, object.width, object.height);
+					waterZone.add(water.collider);
+				}
+				if (object.type == "house") {
+					var house = new Zone(object.x, object.y, object.width, object.height);
+					objects.add(house.collider);
 				}
 			default:
 		}
@@ -105,9 +127,9 @@ class GameState extends State {
 	override function update(dt:Float) {
 		super.update(dt);
 		stage.defaultCamera().setTarget(hero.x, hero.y);
-
 		CollisionEngine.overlap(hero.collision, transportZone, heroVsTransportZone);
-
+		CollisionEngine.collide(hero.collision, waterZone);
+		CollisionEngine.collide(hero.collision, objects);
 	}
 
 	override function render() {
@@ -120,8 +142,9 @@ class GameState extends State {
 		GGD.destroy();
 	}
 
-	function heroVsTransportZone(heroCollision: ICollider, transportZoneCollision: ICollider){
-
+	function heroVsTransportZone(heroCollision:ICollider, transportZoneCollision:ICollider) {
+		GGD.levelNumber = GGD.levelNumber + 1;
+		changeState(new GameState());
 	}
 
 	#if DEBUGDRAW
