@@ -32,6 +32,7 @@ import com.gEngine.display.Text;
 import com.loading.basicResources.FontLoader;
 import com.gEngine.display.Sprite;
 import gameObjects.TransportZone;
+
 class GameState extends State {
 	// var screenWidth:Int;
 	// var screenHeight:Int;
@@ -41,7 +42,7 @@ class GameState extends State {
 	var scoreDisplay:Text;
 	var score:Int = 0;
 	var hudLayer:StaticLayer;
-	// var transportZone:TransportZone;
+	var transportZone:CollisionGroup;
 	override function load(resources:Resources) {
 		resources.add(new DataLoader("world_tmx"));
 		var atlas = new JoinAtlas(2048, 2048);
@@ -59,7 +60,8 @@ class GameState extends State {
 	override function init() {
 		GGD.simulationLayer = new Layer();
 		// transportZone = new CollisionBox();
-		// transportZone=new TransportZone(0,0,0,0, null);
+		// transportZone=new TransportZone(0,0,0,0);
+		transportZone=new CollisionGroup();
 		world = new Tilemap("world_tmx", 1);
 		world.init(function(layerTilemap, tileLayer) {
 			if (!tileLayer.properties.exists("noCollision")) {
@@ -78,10 +80,10 @@ class GameState extends State {
 	function parseMapObjects(layerTilemap:Tilemap, object:TmxObject) {
 		switch (object.objectType) {
 			case OTRectangle:
-				// if (object.type == "transport") {			
-				// 	var transportZone = new TransportZone(object.x, object.y, object.width, object.height, GGD.simulationLayer);
-				// 	GGD.simulationLayer.addChild(transportZone);
-				// }
+				if (object.type == "transport") {			
+					var transport = new TransportZone(object.x, object.y, object.width, object.height);
+					transportZone.add(transport.collider);
+				}
 			default:
 		}
 	}
@@ -104,7 +106,7 @@ class GameState extends State {
 		super.update(dt);
 		stage.defaultCamera().setTarget(hero.x, hero.y);
 
-		// CollisionEngine.overlap(hero.collision, transportZone.collider, heroVsTransportZone);
+		CollisionEngine.overlap(hero.collision, transportZone, heroVsTransportZone);
 
 	}
 

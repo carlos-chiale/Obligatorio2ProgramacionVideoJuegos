@@ -131,6 +131,6 @@
 </data>
  </layer>
  <objectgroup id="2" name="transport">
-  <object id="1" x="833.54" y="152.981" width="121.558" height="148.02"/>
+  <object id="1" type="transport" x="833.54" y="152.981" width="121.558" height="148.02"/>
  </objectgroup>
 </map>

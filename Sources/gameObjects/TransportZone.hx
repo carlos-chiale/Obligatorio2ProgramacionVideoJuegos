@@ -7,7 +7,7 @@ import com.gEngine.display.Layer;
 class TransportZone extends Entity {
 	public var collider:CollisionBox;
 
-	public function new(x:Float, y:Float, width:Float, height:Float, layer:Layer) {
+	public function new(x:Float, y:Float, width:Float, height:Float) {
         super();
         collider = new CollisionBox();
         collider.x = x;
@@ -15,7 +15,6 @@ class TransportZone extends Entity {
 		collider.userData = this;
 		collider.width = width;
         collider.height = height;
-        // layer.addChild()
     }
     
     override function update(dt:Float) {
