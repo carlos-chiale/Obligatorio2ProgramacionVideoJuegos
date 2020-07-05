@@ -32,8 +32,6 @@ class Hero extends Entity {
 		direction = new FastVector2(0, 1);
 		display = new Sprite("characters");
 		display.timeline.frameRate=1/20;
-		// display.offsetX=-16;
-		// display.offsetY=-10;
 		display.pivotX=16;
 		display.smooth = false;
 		layer.addChild(display);
@@ -78,12 +76,12 @@ class Hero extends Entity {
 		if (notWalking()) {
 			if (direction.x == 0) {
 				if (direction.y > 0) {
-					display.timeline.playAnimation("idle"); // down
+					display.timeline.playAnimation("idleHero"); // down
 				} else {
-					display.timeline.playAnimation("idle"); // up
+					display.timeline.playAnimation("idleHero"); // up
 				}
 			} else {
-				display.timeline.playAnimation("idle");
+				display.timeline.playAnimation("idleHero");
 				if (direction.x > 0) {
 					display.scaleX = 1;
 				} else {
@@ -93,12 +91,12 @@ class Hero extends Entity {
 		}else{
 			if(direction.x==0){
 				if(direction.y>0){
-					display.timeline.playAnimation("walkDown");
+					display.timeline.playAnimation("walkDownHero");
 				}else{
-					display.timeline.playAnimation("walkUp");
+					display.timeline.playAnimation("walkUpHero");
 				}
 			}else{
-				display.timeline.playAnimation("walkToRight");
+				display.timeline.playAnimation("walkToRightHero");
 				if(direction.x>0){
 					display.scaleX = Math.abs(display.scaleX);
 				}else{

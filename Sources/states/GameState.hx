@@ -32,6 +32,7 @@ import com.gEngine.display.Text;
 import com.loading.basicResources.FontLoader;
 import com.gEngine.display.Sprite;
 import gameObjects.Zone;
+import gameObjects.Enemy;
 
 class GameState extends State {
 	// var screenWidth:Int;
@@ -45,19 +46,23 @@ class GameState extends State {
 	var transportZone:CollisionGroup;
 	var waterZone:CollisionGroup;
 	var objects:CollisionGroup;
+	var enemyCollisions:CollisionGroup;
 
 	override function load(resources:Resources) {
 		resources.add(new DataLoader("world" + GGD.levelNumber + "_tmx"));
 		var atlas = new JoinAtlas(3072, 3072);
 		atlas.add(new TilesheetLoader("RPGpack", 32, 32, 0));
 		atlas.add(new TilesheetLoader("inside", 16, 16, 0));
-		// atlas.add(new TilesheetLoader("58032", 16, 16, 0));
 		atlas.add(new FontLoader("KenneyThick", 30));
 		atlas.add(new SpriteSheetLoader("characters", 32, 32, 0, [
-			new Sequence("idle", [51]),
-			new Sequence("walkDown", [48, 49, 50, 51]),
-			new Sequence("walkUp", [52, 53, 54, 55]),
-			new Sequence("walkToRight", [56, 57, 58])
+			new Sequence("idleHero", [51]),
+			new Sequence("walkDownHero", [48, 49, 50, 51]),
+			new Sequence("walkUpHero", [52, 53, 54, 55]),
+			new Sequence("walkToRightHero", [56, 57, 58]),
+			new Sequence("idleEnemy", [99]),
+			new Sequence("walkDownEnemy", [96, 97, 98, 99]),
+			new Sequence("walkUpEnemy", [100, 101, 102, 103]),
+			new Sequence("walkToRightEnemy", [104, 105, 106])
 		]));
 		resources.add(atlas);
 	}
@@ -67,6 +72,7 @@ class GameState extends State {
 		transportZone = new CollisionGroup();
 		waterZone = new CollisionGroup();
 		objects = new CollisionGroup();
+		enemyCollisions=new CollisionGroup();
 		world = new Tilemap("world" + GGD.levelNumber + "_tmx", 1);
 		if (GGD.levelNumber == 3) {
 			world.init(function(layerTilemap, tileLayer) {
@@ -78,6 +84,7 @@ class GameState extends State {
 			stage.addChild(GGD.simulationLayer);
 			stage.defaultCamera().limits(0, 0, 512, 768);
 			hero = new Hero(225, 440, GGD.simulationLayer);
+			GGD.player=hero;
 		} else {
 			world.init(function(layerTilemap, tileLayer) {
 				if (!tileLayer.properties.exists("noCollision")) {
@@ -92,6 +99,11 @@ class GameState extends State {
 			} else {
 				hero = new Hero(50, 150, GGD.simulationLayer);
 			}
+			GGD.player=hero;
+			for(i in 0...60){
+				var enemy:Enemy=new Enemy(GGD.simulationLayer, enemyCollisions);
+				addChild(enemy);
+			}	
 		}
 		createTouchJoystick();
 		GGD.camera = stage.defaultCamera();
