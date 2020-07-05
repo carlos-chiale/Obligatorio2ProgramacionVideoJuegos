@@ -1,5 +1,7 @@
 package states;
 
+import com.collision.platformer.CollisionBox;
+import com.helpers.Rectangle;
 import com.loading.basicResources.SpriteSheetLoader;
 import com.gEngine.display.Blend;
 import com.framework.utils.Random;
@@ -29,18 +31,17 @@ import com.gEngine.display.StaticLayer;
 import com.gEngine.display.Text;
 import com.loading.basicResources.FontLoader;
 import com.gEngine.display.Sprite;
-
+import gameObjects.TransportZone;
 class GameState extends State {
 	// var screenWidth:Int;
 	// var screenHeight:Int;
 	var world:Tilemap;
 	var hero:Hero;
 	var touchJoystick:VirtualGamepad;
-	// var ballCollisions:CollisionGroup;
 	var scoreDisplay:Text;
 	var score:Int = 0;
 	var hudLayer:StaticLayer;
-
+	// var transportZone:TransportZone;
 	override function load(resources:Resources) {
 		resources.add(new DataLoader("world_tmx"));
 		var atlas = new JoinAtlas(2048, 2048);
@@ -48,16 +49,18 @@ class GameState extends State {
 		atlas.add(new FontLoader("KenneyThick", 30));
 		atlas.add(new SpriteSheetLoader("characters", 32, 32, 0, [
 			new Sequence("idle", [51]),
-			new Sequence("walkDown", [49, 50, 51, 52]),
-			new Sequence("walkUp", [53, 54, 55, 56]),
-			new Sequence("walkToRight", [57, 58, 59])
+			new Sequence("walkDown", [48, 49, 50, 51]),
+			new Sequence("walkUp", [52, 53, 54, 55]),
+			new Sequence("walkToRight", [56, 57, 58])
 		]));
 		resources.add(atlas);
 	}
 
 	override function init() {
 		GGD.simulationLayer = new Layer();
-		world = new Tilemap("world_tmx",1);
+		// transportZone = new CollisionBox();
+		// transportZone=new TransportZone(0,0,0,0, null);
+		world = new Tilemap("world_tmx", 1);
 		world.init(function(layerTilemap, tileLayer) {
 			if (!tileLayer.properties.exists("noCollision")) {
 				layerTilemap.createCollisions(tileLayer);
@@ -65,13 +68,23 @@ class GameState extends State {
 			GGD.simulationLayer.addChild(layerTilemap.createDisplay(tileLayer, new Sprite("RPGpack")));
 		}, parseMapObjects);
 		stage.addChild(GGD.simulationLayer);
+		hero = new Hero(200, 750, GGD.simulationLayer);
 		createTouchJoystick();
-		// stage.defaultCamera().limits(0, 0, 768, 768);
-		hero = new Hero(250, 250, GGD.simulationLayer);
+		GGD.camera = stage.defaultCamera();
+		stage.defaultCamera().limits(0, 0, world.widthIntTiles * 32, world.heightInTiles * 32);
 		addChild(hero);
 	}
 
-	function parseMapObjects(layerTilemap:Tilemap, object:TmxObject) {}
+	function parseMapObjects(layerTilemap:Tilemap, object:TmxObject) {
+		switch (object.objectType) {
+			case OTRectangle:
+				// if (object.type == "transport") {			
+				// 	var transportZone = new TransportZone(object.x, object.y, object.width, object.height, GGD.simulationLayer);
+				// 	GGD.simulationLayer.addChild(transportZone);
+				// }
+			default:
+		}
+	}
 
 	function createTouchJoystick() {
 		touchJoystick = new VirtualGamepad();
@@ -85,10 +98,14 @@ class GameState extends State {
 		gamepad.notify(hero.onAxisChange, hero.onButtonChange);
 	}
 
-	private var mTime:Float = 0; 
+	private var mTime:Float = 0;
 
 	override function update(dt:Float) {
 		super.update(dt);
+		stage.defaultCamera().setTarget(hero.x, hero.y);
+
+		// CollisionEngine.overlap(hero.collision, transportZone.collider, heroVsTransportZone);
+
 	}
 
 	override function render() {
@@ -101,6 +118,10 @@ class GameState extends State {
 		GGD.destroy();
 	}
 
+	function heroVsTransportZone(heroCollision: ICollider, transportZoneCollision: ICollider){
+
+	}
+
 	#if DEBUGDRAW
 	override function draw(framebuffer:kha.Canvas) {
 		super.draw(framebuffer);
@@ -108,5 +129,4 @@ class GameState extends State {
 		CollisionEngine.renderDebug(framebuffer, camera);
 	}
 	#end
-
 }
