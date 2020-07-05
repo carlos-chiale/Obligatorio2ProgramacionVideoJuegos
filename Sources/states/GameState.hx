@@ -50,7 +50,7 @@ class GameState extends State {
 		resources.add(new DataLoader("world" + GGD.levelNumber + "_tmx"));
 		var atlas = new JoinAtlas(3072, 3072);
 		atlas.add(new TilesheetLoader("RPGpack", 32, 32, 0));
-		atlas.add(new TilesheetLoader("inside", 32, 32, 0));
+		atlas.add(new TilesheetLoader("inside", 16, 16, 0));
 		// atlas.add(new TilesheetLoader("58032", 16, 16, 0));
 		atlas.add(new FontLoader("KenneyThick", 30));
 		atlas.add(new SpriteSheetLoader("characters", 32, 32, 0, [
@@ -74,7 +74,10 @@ class GameState extends State {
 					layerTilemap.createCollisions(tileLayer);
 				}
 				GGD.simulationLayer.addChild(layerTilemap.createDisplay(tileLayer, new Sprite("inside")));
-			}, parseMapObjects);			
+			}, parseMapObjects);
+			stage.addChild(GGD.simulationLayer);
+			stage.defaultCamera().limits(0, 0, 512, 768);
+			hero = new Hero(225, 440, GGD.simulationLayer);
 		} else {
 			world.init(function(layerTilemap, tileLayer) {
 				if (!tileLayer.properties.exists("noCollision")) {
@@ -82,12 +85,16 @@ class GameState extends State {
 				}
 				GGD.simulationLayer.addChild(layerTilemap.createDisplay(tileLayer, new Sprite("RPGpack")));
 			}, parseMapObjects);
+			stage.addChild(GGD.simulationLayer);
+			stage.defaultCamera().limits(0, 0, world.widthIntTiles * 32, world.heightInTiles * 32);
+			if (GGD.levelNumber == 1) {
+				hero = new Hero(150, 900, GGD.simulationLayer);
+			} else {
+				hero = new Hero(50, 150, GGD.simulationLayer);
+			}
 		}
-		stage.addChild(GGD.simulationLayer);
-		hero = new Hero(200, 750, GGD.simulationLayer);
 		createTouchJoystick();
 		GGD.camera = stage.defaultCamera();
-		stage.defaultCamera().limits(0, 0, world.widthIntTiles * 32, world.heightInTiles * 32);
 		addChild(hero);
 	}
 
