@@ -33,6 +33,7 @@ import com.loading.basicResources.FontLoader;
 import com.gEngine.display.Sprite;
 import gameObjects.Zone;
 import gameObjects.Enemy;
+import gameObjects.Devil;
 
 class GameState extends State {
 	// var screenWidth:Int;
@@ -64,6 +65,13 @@ class GameState extends State {
 			new Sequence("walkUpEnemy", [100, 101, 102, 103]),
 			new Sequence("walkToRightEnemy", [104, 105, 106])
 		]));
+		atlas.add(new SpriteSheetLoader("devil", 64, 64, 0, [
+			new Sequence("idleDevil", [11]),
+			new Sequence("walkDownDevil", [8, 9, 10, 11]),
+			new Sequence("walkUpDevil", [0, 1, 2, 3]),
+			new Sequence("walkToRightDevil", [12, 13, 14, 15]),			
+			new Sequence("walkToLeftDevil", [4, 5, 6, 7]),			
+		]));
 		resources.add(atlas);
 	}
 
@@ -85,6 +93,10 @@ class GameState extends State {
 			stage.defaultCamera().limits(0, 0, 512, 768);
 			hero = new Hero(225, 440, GGD.simulationLayer);
 			GGD.player=hero;
+			for(i in 0...4){
+				var enemy:Devil=new Devil(GGD.simulationLayer, enemyCollisions);
+				addChild(enemy);
+			}	
 		} else {
 			world.init(function(layerTilemap, tileLayer) {
 				if (!tileLayer.properties.exists("noCollision")) {
@@ -147,8 +159,10 @@ class GameState extends State {
 		super.update(dt);
 		stage.defaultCamera().setTarget(hero.x, hero.y);
 		CollisionEngine.overlap(hero.collision, transportZone, heroVsTransportZone);
+		CollisionEngine.overlap(hero.collision, enemyCollisions);
 		CollisionEngine.collide(hero.collision, waterZone);
-		CollisionEngine.collide(hero.collision, objects);
+		CollisionEngine.collide(enemyCollisions, waterZone);
+		CollisionEngine.collide(enemyCollisions, objects);
 	}
 
 	override function render() {
