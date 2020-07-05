@@ -15,6 +15,7 @@ class Zone extends Entity {
 		collider.userData = this;
 		collider.width = width;
         collider.height = height;
+        collider.staticObject = true;
     }
     
     override function update(dt:Float) {
