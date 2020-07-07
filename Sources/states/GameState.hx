@@ -48,6 +48,7 @@ class GameState extends State {
 	var waterZone:CollisionGroup;
 	var objects:CollisionGroup;
 	var enemyCollisions:CollisionGroup;
+	var collisionWand:CollisionBox;
 
 	override function load(resources:Resources) {
 		resources.add(new DataLoader("world" + GGD.levelNumber + "_tmx"));
@@ -63,14 +64,15 @@ class GameState extends State {
 			new Sequence("idleEnemy", [99]),
 			new Sequence("walkDownEnemy", [96, 97, 98, 99]),
 			new Sequence("walkUpEnemy", [100, 101, 102, 103]),
-			new Sequence("walkToRightEnemy", [104, 105, 106])
+			new Sequence("walkToRightEnemy", [104, 105, 106]),
+			new Sequence("wand", [131])
 		]));
 		atlas.add(new SpriteSheetLoader("devil", 64, 64, 0, [
 			new Sequence("idleDevil", [11]),
 			new Sequence("walkDownDevil", [8, 9, 10, 11]),
 			new Sequence("walkUpDevil", [0, 1, 2, 3]),
-			new Sequence("walkToRightDevil", [12, 13, 14, 15]),			
-			new Sequence("walkToLeftDevil", [4, 5, 6, 7]),			
+			new Sequence("walkToRightDevil", [12, 13, 14, 15]),
+			new Sequence("walkToLeftDevil", [4, 5, 6, 7]),
 		]));
 		resources.add(atlas);
 	}
@@ -80,7 +82,8 @@ class GameState extends State {
 		transportZone = new CollisionGroup();
 		waterZone = new CollisionGroup();
 		objects = new CollisionGroup();
-		enemyCollisions=new CollisionGroup();
+		enemyCollisions = new CollisionGroup();
+		collisionWand = new CollisionBox();
 		world = new Tilemap("world" + GGD.levelNumber + "_tmx", 1);
 		if (GGD.levelNumber == 3) {
 			world.init(function(layerTilemap, tileLayer) {
@@ -92,11 +95,11 @@ class GameState extends State {
 			stage.addChild(GGD.simulationLayer);
 			stage.defaultCamera().limits(0, 0, 512, 768);
 			hero = new Hero(225, 440, GGD.simulationLayer);
-			GGD.player=hero;
-			for(i in 0...4){
-				var enemy:Devil=new Devil(GGD.simulationLayer, enemyCollisions);
+			GGD.player = hero;
+			for (i in 0...4) {
+				var enemy:Devil = new Devil(GGD.simulationLayer, enemyCollisions);
 				addChild(enemy);
-			}	
+			}
 		} else {
 			world.init(function(layerTilemap, tileLayer) {
 				if (!tileLayer.properties.exists("noCollision")) {
@@ -110,12 +113,22 @@ class GameState extends State {
 				hero = new Hero(150, 900, GGD.simulationLayer);
 			} else {
 				hero = new Hero(50, 150, GGD.simulationLayer);
+				var wand:Sprite = new Sprite("characters");
+				wand.timeline.playAnimation("wand");
+				collisionWand.width = wand.width();
+				collisionWand.height = wand.height();
+				collisionWand.x = 800;
+				collisionWand.y = 150;
+				collisionWand.userData = this;
+				GGD.simulationLayer.addChild(wand);
+				wand.x = collisionWand.x;
+				wand.y = collisionWand.y;
 			}
-			GGD.player=hero;
-			for(i in 0...60){
-				var enemy:Enemy=new Enemy(GGD.simulationLayer, enemyCollisions);
+			GGD.player = hero;
+			for (i in 0...60) {
+				var enemy:Enemy = new Enemy(GGD.simulationLayer, enemyCollisions);
 				addChild(enemy);
-			}	
+			}
 		}
 		createTouchJoystick();
 		GGD.camera = stage.defaultCamera();
@@ -163,6 +176,8 @@ class GameState extends State {
 		CollisionEngine.collide(hero.collision, waterZone);
 		CollisionEngine.collide(enemyCollisions, waterZone);
 		CollisionEngine.collide(enemyCollisions, objects);
+		CollisionEngine.collide(hero.collision, objects);
+		CollisionEngine.overlap(hero.collision, collisionWand, heroVsWand);
 	}
 
 	override function render() {
@@ -176,8 +191,24 @@ class GameState extends State {
 	}
 
 	function heroVsTransportZone(heroCollision:ICollider, transportZoneCollision:ICollider) {
-		GGD.levelNumber = GGD.levelNumber + 1;
-		changeState(new GameState());
+		switch (GGD.levelNumber) {
+			case 1:
+				GGD.levelNumber = GGD.levelNumber + 1;
+				changeState(new GameState());
+			case 2:
+				if (GGD.hasWand) {
+					GGD.levelNumber = GGD.levelNumber + 1;
+					changeState(new GameState());
+				}
+			default:
+		}
+
+		if (GGD.hasWand) {}
+	}
+
+	function heroVsWand(heroCollision:ICollider, wand:ICollider) {
+		GGD.hasWand = true;
+		wand.removeFromParent();
 	}
 
 	#if DEBUGDRAW
