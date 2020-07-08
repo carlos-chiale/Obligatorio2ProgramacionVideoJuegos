@@ -1,5 +1,6 @@
 package states;
 
+import js.html.audio.WaveShaperNode;
 import com.collision.platformer.CollisionBox;
 import com.helpers.Rectangle;
 import com.loading.basicResources.SpriteSheetLoader;
@@ -25,7 +26,6 @@ import format.tmx.Data.TmxObject;
 import kha.Assets;
 import gameObjects.Hero;
 import GlobalGameData.GGD;
-import gameObjects.Bullet;
 import com.collision.platformer.CollisionGroup;
 import com.gEngine.display.StaticLayer;
 import com.gEngine.display.Text;
@@ -34,6 +34,7 @@ import com.gEngine.display.Sprite;
 import gameObjects.Zone;
 import gameObjects.Enemy;
 import gameObjects.Devil;
+import gameObjects.Wand;
 
 class GameState extends State {
 	// var screenWidth:Int;
@@ -48,7 +49,8 @@ class GameState extends State {
 	var waterZone:CollisionGroup;
 	var objects:CollisionGroup;
 	var enemyCollisions:CollisionGroup;
-	var collisionWand:CollisionBox;
+	var wand:Wand;
+	var isWand:Bool;
 
 	override function load(resources:Resources) {
 		resources.add(new DataLoader("world" + GGD.levelNumber + "_tmx"));
@@ -83,9 +85,10 @@ class GameState extends State {
 		waterZone = new CollisionGroup();
 		objects = new CollisionGroup();
 		enemyCollisions = new CollisionGroup();
-		collisionWand = new CollisionBox();
 		world = new Tilemap("world" + GGD.levelNumber + "_tmx", 1);
+		isWand = false;
 		if (GGD.levelNumber == 3) {
+			isWand = false;
 			world.init(function(layerTilemap, tileLayer) {
 				if (!tileLayer.properties.exists("noCollision")) {
 					layerTilemap.createCollisions(tileLayer);
@@ -110,19 +113,11 @@ class GameState extends State {
 			stage.addChild(GGD.simulationLayer);
 			stage.defaultCamera().limits(0, 0, world.widthIntTiles * 32, world.heightInTiles * 32);
 			if (GGD.levelNumber == 1) {
-				hero = new Hero(150, 900, GGD.simulationLayer);
+				hero = new Hero(150, 900, GGD.simulationLayer);				
 			} else {
 				hero = new Hero(50, 150, GGD.simulationLayer);
-				var wand:Sprite = new Sprite("characters");
-				wand.timeline.playAnimation("wand");
-				collisionWand.width = wand.width();
-				collisionWand.height = wand.height();
-				collisionWand.x = 800;
-				collisionWand.y = 150;
-				collisionWand.userData = this;
-				GGD.simulationLayer.addChild(wand);
-				wand.x = collisionWand.x;
-				wand.y = collisionWand.y;
+				wand = new Wand(800, 150, GGD.simulationLayer);
+				isWand = true;
 			}
 			GGD.player = hero;
 			for (i in 0...60) {
@@ -177,7 +172,9 @@ class GameState extends State {
 		CollisionEngine.collide(enemyCollisions, waterZone);
 		CollisionEngine.collide(enemyCollisions, objects);
 		CollisionEngine.collide(hero.collision, objects);
-		CollisionEngine.overlap(hero.collision, collisionWand, heroVsWand);
+		if(isWand){
+			CollisionEngine.overlap(hero.collision, wand.collider, heroVsWand);
+		}		
 	}
 
 	override function render() {
@@ -202,13 +199,13 @@ class GameState extends State {
 				}
 			default:
 		}
-
-		if (GGD.hasWand) {}
 	}
 
-	function heroVsWand(heroCollision:ICollider, wand:ICollider) {
+	function heroVsWand(heroCollision:ICollider, wandCollision:ICollider) {
 		GGD.hasWand = true;
-		wand.removeFromParent();
+		isWand = false;
+		this.wand.damage();
+		this.wand.die();
 	}
 
 	#if DEBUGDRAW
