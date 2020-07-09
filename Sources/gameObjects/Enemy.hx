@@ -22,7 +22,6 @@ class Enemy extends Entity {
 		display = new Sprite("characters");
 		layer.addChild(display);
 		// display.offsetY = 7;
-
 		collision = new CollisionBox();
 		collision.userData = this;
 		collision.width = display.width();
@@ -74,13 +73,14 @@ class Enemy extends Entity {
 	}
 
 	public function damage():Void {
-		display.offsetY = -35;
+		// display.offsetY = -35;
 		// display.timeline.playAnimation("die_", false);
+		display.removeFromParent();
 		collision.removeFromParent();
 	}
 
 	override function render() {
-		display.x = collision.x + collision.width * 0.5;
+		display.x = collision.x;
 		display.y = collision.y;
 		// if (display.timeline.currentAnimation == "die_")
 		// 	return;

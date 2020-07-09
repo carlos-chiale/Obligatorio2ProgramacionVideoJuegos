@@ -13,6 +13,7 @@ class Devil extends Entity {
 	var display:Sprite;
 	var collision:CollisionBox;
 	var collisionGroup:CollisionGroup;
+	var life:Int=10;
 
 	static inline var MAX_SPEED:Float = 100;
 
@@ -28,7 +29,7 @@ class Devil extends Entity {
 		collision = new CollisionBox();
 		collision.userData = this;
 		collision.width = display.width();
-		collision.height = display.height();
+		collision.height = display.height() * 2;
 		display.timeline.frameRate = 1 / 20;
 		display.pivotX = 32;
 		display.smooth = false;
@@ -76,13 +77,17 @@ class Devil extends Entity {
 	}
 
 	public function damage():Void {
-		display.offsetY = -35;
+		// display.offsetY = -35;
 		// display.timeline.playAnimation("die_", false);
-		collision.removeFromParent();
+		this.life--;
+		if(this.life==0){
+			collision.removeFromParent();
+			display.removeFromParent();
+		}		
 	}
 
 	override function render() {
-		display.x = collision.x + collision.width * 0.5;
+		display.x = collision.x;
 		display.y = collision.y;
 		// if (display.timeline.currentAnimation == "die_")
 		// 	return;

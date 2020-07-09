@@ -1,5 +1,6 @@
 package states;
 
+import gameObjects.Bullet;
 import js.html.audio.WaveShaperNode;
 import com.collision.platformer.CollisionBox;
 import com.helpers.Rectangle;
@@ -49,6 +50,7 @@ class GameState extends State {
 	var waterZone:CollisionGroup;
 	var objects:CollisionGroup;
 	var enemyCollisions:CollisionGroup;
+	var devilsCollisions:CollisionGroup;
 	var wand:Wand;
 	var isWand:Bool;
 
@@ -85,6 +87,7 @@ class GameState extends State {
 		waterZone = new CollisionGroup();
 		objects = new CollisionGroup();
 		enemyCollisions = new CollisionGroup();
+		devilsCollisions = new CollisionGroup();
 		world = new Tilemap("world" + GGD.levelNumber + "_tmx", 1);
 		isWand = false;
 		if (GGD.levelNumber == 3) {
@@ -100,7 +103,7 @@ class GameState extends State {
 			hero = new Hero(225, 440, GGD.simulationLayer);
 			GGD.player = hero;
 			for (i in 0...4) {
-				var enemy:Devil = new Devil(GGD.simulationLayer, enemyCollisions);
+				var enemy:Devil = new Devil(GGD.simulationLayer, devilsCollisions);
 				addChild(enemy);
 			}
 		} else {
@@ -113,7 +116,7 @@ class GameState extends State {
 			stage.addChild(GGD.simulationLayer);
 			stage.defaultCamera().limits(0, 0, world.widthIntTiles * 32, world.heightInTiles * 32);
 			if (GGD.levelNumber == 1) {
-				hero = new Hero(150, 900, GGD.simulationLayer);				
+				hero = new Hero(150, 900, GGD.simulationLayer);
 			} else {
 				hero = new Hero(50, 150, GGD.simulationLayer);
 				wand = new Wand(800, 150, GGD.simulationLayer);
@@ -168,13 +171,16 @@ class GameState extends State {
 		stage.defaultCamera().setTarget(hero.x, hero.y);
 		CollisionEngine.overlap(hero.collision, transportZone, heroVsTransportZone);
 		CollisionEngine.overlap(hero.collision, enemyCollisions);
+		CollisionEngine.overlap(hero.collision, devilsCollisions);
 		CollisionEngine.collide(hero.collision, waterZone);
 		CollisionEngine.collide(enemyCollisions, waterZone);
 		CollisionEngine.collide(enemyCollisions, objects);
 		CollisionEngine.collide(hero.collision, objects);
-		if(isWand){
+		CollisionEngine.overlap(hero.gun.bulletsCollisions, enemyCollisions, bulletVsEnemy);
+		CollisionEngine.overlap(hero.gun.bulletsCollisions, devilsCollisions, bulletVsDevil);
+		if (isWand) {
 			CollisionEngine.overlap(hero.collision, wand.collider, heroVsWand);
-		}		
+		}
 	}
 
 	override function render() {
@@ -206,6 +212,20 @@ class GameState extends State {
 		isWand = false;
 		this.wand.damage();
 		this.wand.die();
+	}
+
+	function bulletVsEnemy(bulletCollision:ICollider, enemyCollision:ICollider) {
+		var enemy:Enemy = cast enemyCollision.userData;
+		enemy.damage();
+		var bullet:Bullet = cast bulletCollision.userData;
+		bullet.die();
+	}
+
+	function bulletVsDevil(bulletCollision:ICollider, devilCollision:ICollider) {
+		var devil:Devil = cast devilCollision.userData;
+		devil.damage();
+		var bullet:Bullet = cast bulletCollision.userData;
+		bullet.die();
 	}
 
 	#if DEBUGDRAW
