@@ -178,6 +178,7 @@ class GameState extends State {
 		CollisionEngine.collide(hero.collision, objects);
 		CollisionEngine.overlap(hero.gun.bulletsCollisions, enemyCollisions, bulletVsEnemy);
 		CollisionEngine.overlap(hero.gun.bulletsCollisions, devilsCollisions, bulletVsDevil);
+		CollisionEngine.overlap(hero.gun.bulletsCollisions, objects, bulletVsObjects);
 		if (isWand) {
 			CollisionEngine.overlap(hero.collision, wand.collider, heroVsWand);
 		}
@@ -224,6 +225,11 @@ class GameState extends State {
 	function bulletVsDevil(bulletCollision:ICollider, devilCollision:ICollider) {
 		var devil:Devil = cast devilCollision.userData;
 		devil.damage();
+		var bullet:Bullet = cast bulletCollision.userData;
+		bullet.die();
+	}
+
+	function bulletVsObjects(bulletCollision:ICollider, objectCollision:ICollider) {
 		var bullet:Bullet = cast bulletCollision.userData;
 		bullet.die();
 	}
