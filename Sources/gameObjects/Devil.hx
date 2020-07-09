@@ -23,7 +23,7 @@ class Devil extends Entity {
 	public var x(get, null):Float;
 	public var y(get, null):Float;
 
-	private var mCurrentTime:Float;
+	private var lastShoot:Float;
 
 	private static inline var MAXTIME:Float = 2;
 	private static inline var MINTIME:Float = 1;
@@ -32,7 +32,7 @@ class Devil extends Entity {
 
 	public function new(layer:Layer, collisions:CollisionGroup, minX:Float, maxX:Float, minY:Float, maxY:Float) {
 		super();
-		mCurrentTime = Random.getRandomIn(MINTIME,MAXTIME);
+		lastShoot = Random.getRandomIn(MINTIME,MAXTIME);
 		collisionGroup = collisions;
 		display = new Sprite("devil");
 		display.scaleX = 2;
@@ -40,9 +40,9 @@ class Devil extends Entity {
 		layer.addChild(display);
 		// display.offsetY = 7;
 		collision = new CollisionBox();
-		collision.userData = this;
 		collision.width = display.width();
 		collision.height = display.height() * 2;
+		collision.userData = this;
 		display.timeline.frameRate = 1 / 20;
 		display.pivotX = 32;
 		display.smooth = false;
@@ -50,8 +50,6 @@ class Devil extends Entity {
 		collisionGroup.add(collision);
 		gun = new Gun();
 		addChild(gun);
-		collision.width = display.width();
-		collision.height = display.height();
 		randomPos(minX, maxX, minY, maxY);	
 	}
 
@@ -72,6 +70,7 @@ class Devil extends Entity {
 	}
 
 	override public function update(dt:Float):Void {
+		super.update(dt);
 		// if(display.timeline.currentAnimation=="die_"){
 		//     if(display.timeline.playing){
 		//         randomPos();
@@ -91,12 +90,13 @@ class Devil extends Entity {
 		dir.setFrom(dir.mult(MAX_SPEED));
 		collision.velocityX = dir.x;
 		collision.velocityY = dir.y;
-		mCurrentTime -= dt;
-		if (mCurrentTime <= 0) {
-			gun.shoot(x, y, dir.x, dir.y);
+		lastShoot -= dt;
+		if (lastShoot <= 0) {
+			gun.shoot(display.x, display.y, dir.x, dir.y);
+			lastShoot=Random.getRandomIn(MINTIME,MAXTIME);
 		}
 		collision.update(dt);
-		super.update(dt);
+
 	}
 
 	public function damage():Void {

@@ -37,6 +37,8 @@ import gameObjects.Zone;
 import gameObjects.Enemy;
 import gameObjects.Devil;
 import gameObjects.Wand;
+import kha.Color;
+import com.gEngine.display.StaticLayer;
 
 class GameState extends State {
 	// var screenWidth:Int;
@@ -79,6 +81,7 @@ class GameState extends State {
 			new Sequence("walkToRightDevil", [12, 13, 14, 15]),
 			new Sequence("walkToLeftDevil", [4, 5, 6, 7]),
 		]));
+		atlas.add(new FontLoader("Kenney_Pixel", 24));
 		resources.add(atlas);
 	}
 
@@ -93,6 +96,9 @@ class GameState extends State {
 		isWand = false;
 		isPotion = false;
 		thereAreDevils = false;
+		stage.addChild(GGD.simulationLayer);
+		hudLayer = new StaticLayer();
+		stage.addChild(hudLayer);
 		if (GGD.levelNumber == 3) {
 			isWand = false;
 			world.init(function(layerTilemap, tileLayer) {
@@ -213,6 +219,12 @@ class GameState extends State {
 	function heroVsTransportZone(heroCollision:ICollider, transportZoneCollision:ICollider) {
 		switch (GGD.levelNumber) {
 			case 1:
+				// var helpText = new Text("Kenney_Pixel");
+				// helpText.text = "You need the potion first.";
+				// helpText.x = 200;
+				// helpText.y = 200;
+				// helpText.color = Color.Red;
+				// hudLayer.addChild(helpText);
 				if (GGD.hasPotion) {
 					GGD.levelNumber = GGD.levelNumber + 1;
 					changeState(new GameState());
