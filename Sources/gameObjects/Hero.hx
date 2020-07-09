@@ -11,7 +11,8 @@ import kha.math.FastVector2;
 import GlobalGameData.GGD;
 
 class Hero extends Entity {
-	static private inline var SPEED:Float = 250;
+
+	public var speed:Float = 140;
 
 	public var display:Sprite;
 	public var collision:CollisionBox;
@@ -23,15 +24,14 @@ class Hero extends Entity {
 
 	// var maxSpeed = 700;
 	public var gun:Gun;
-	public var xForBullet(get,null):Float;
-	public var yForBullet(get,null):Float;
 	var screenWidth = GEngine.i.width;
 	var screenHeight = GEngine.i.height;
 	public var width(get,null):Float;
 	public var height(get,null):Float;
 
-	public function new(x:Float, y:Float, layer:Layer) {
+	public function new(x:Float, y:Float, layer:Layer, xSpeed:Float = 1) {
 		super();
+		speed= speed * xSpeed;
 		direction = new FastVector2(0, 1);
 		display = new Sprite("characters");
 		display.timeline.frameRate=1/20;
@@ -112,28 +112,28 @@ class Hero extends Entity {
 	public function onButtonChange(id:Int, value:Float) {
 		if (id == XboxJoystick.LEFT_DPAD) {
 			if (value == 1) {
-				collision.velocityX = -SPEED;
+				collision.velocityX = -speed;
 			} else {
 				collision.velocityX = 0;
 			}
 		}
 		if (id == XboxJoystick.RIGHT_DPAD) {
 			if (value == 1) {
-				collision.velocityX = SPEED;
+				collision.velocityX = speed;
 			} else {
 				collision.velocityX = 0;
 			}
 		}
 		if (id == XboxJoystick.UP_DPAD) {
 			if (value == 1) {
-				collision.velocityY = -SPEED;
+				collision.velocityY = -speed;
 			} else {
 				collision.velocityY = 0;
 			}
 		}
 		if (id == XboxJoystick.DOWN_DPAD) {
 			if (value == 1) {
-				collision.velocityY = SPEED;
+				collision.velocityY = speed;
 			} else {
 				collision.velocityY = 0;
 			}
@@ -143,13 +143,6 @@ class Hero extends Entity {
 				gun.shoot(x,y-height*0.75,direction.x,direction.y);
 			}
 		}
-	}
-
-	public function get_xForBullet():Float{
-		return collision.x+collision.width/2;
-	}
-	public function get_yForBullet():Float{
-		return collision.y;
 	}
 
 	public function get_x():Float {

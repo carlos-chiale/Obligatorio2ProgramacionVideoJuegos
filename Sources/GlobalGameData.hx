@@ -10,6 +10,7 @@ class GlobalGameData {
     public static var camera:Camera;
     public static var levelNumber:Int=1;
     public static var hasWand:Bool=false;
+    public static var hasPotion:Bool=false;
 
     public static function destroy() {
         player=null;

@@ -8,6 +8,7 @@ import com.gEngine.display.Layer;
 import gameObjects.Hero;
 import GlobalGameData.GGD;
 import kha.math.FastVector2;
+import com.framework.utils.Random;
 
 class Enemy extends Entity {
 	var display:Sprite;
@@ -16,7 +17,7 @@ class Enemy extends Entity {
 
 	static inline var MAX_SPEED:Float = 100;
 
-	public function new(layer:Layer, collisions:CollisionGroup) {
+	public function new(layer:Layer, collisions:CollisionGroup, minX:Float, maxX:Float, minY:Float, maxY:Float) {
 		super();
 		collisionGroup = collisions;
 		display = new Sprite("characters");
@@ -29,23 +30,26 @@ class Enemy extends Entity {
         display.timeline.frameRate = 1 / 20;
         display.pivotX=16;
 		display.smooth = false;
-		randomPos();
+		randomPos(minX, maxX, minY, maxY);
 	}
 
-	private function randomPos() {
+	private function randomPos(minX:Float, maxX:Float, minY:Float, maxY:Float) {
 		// display.offsetX=-22;
 		// display.offsetY=-14;
 		display.timeline.playAnimation("idleEnemy");
 		collisionGroup.add(collision);
-		var target:Hero = GGD.player;
-		var dirX = 1 - Math.random() * 2;
-		var dirY = 1 - Math.random() * 2;
-		if (dirX == 0 && dirY == 0) {
-			dirX += 1;
-		}
-		var length = Math.sqrt(dirX * dirX + dirY * dirY);
-		collision.x = target.x + 1000 * dirX / length;
-		collision.y = target.y + 600 * dirY / length;
+		// var target:Hero = GGD.player;
+		// var dirX = 1 - Math.random() * 2;
+		// var dirY = 1 - Math.random() * 2;
+		// if (dirX == 0 && dirY == 0) {
+		// 	dirX += 1;
+		// }
+		// var length = Math.sqrt(dirX * dirX + dirY * dirY);
+		// collision.x = target.x + 1000 * dirX / length;
+		// collision.y = target.y + 600 * dirY / length;
+
+		collision.x = Random.getRandomIn(minX, maxX);
+		collision.y = Random.getRandomIn(minY, maxY);
 	}
 
 	override public function update(dt:Float):Void {

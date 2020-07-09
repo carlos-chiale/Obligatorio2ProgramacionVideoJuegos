@@ -1,5 +1,6 @@
 package states;
 
+import gameObjects.Potion;
 import gameObjects.Bullet;
 import js.html.audio.WaveShaperNode;
 import com.collision.platformer.CollisionBox;
@@ -42,6 +43,9 @@ class GameState extends State {
 	// var screenHeight:Int;
 	var world:Tilemap;
 	var hero:Hero;
+	var devil1:Devil;
+	var devil2:Devil;
+	var devil3:Devil;
 	var touchJoystick:VirtualGamepad;
 	var scoreDisplay:Text;
 	var score:Int = 0;
@@ -52,7 +56,10 @@ class GameState extends State {
 	var enemyCollisions:CollisionGroup;
 	var devilsCollisions:CollisionGroup;
 	var wand:Wand;
+	var potion:Potion;
 	var isWand:Bool;
+	var isPotion:Bool;
+	var thereAreDevils:Bool;
 
 	override function load(resources:Resources) {
 		resources.add(new DataLoader("world" + GGD.levelNumber + "_tmx"));
@@ -61,16 +68,10 @@ class GameState extends State {
 		atlas.add(new TilesheetLoader("inside", 16, 16, 0));
 		atlas.add(new FontLoader("KenneyThick", 30));
 		atlas.add(new SpriteSheetLoader("characters", 32, 32, 0, [
-			new Sequence("idleHero", [51]),
-			new Sequence("walkDownHero", [48, 49, 50, 51]),
-			new Sequence("walkUpHero", [52, 53, 54, 55]),
-			new Sequence("walkToRightHero", [56, 57, 58]),
-			new Sequence("idleEnemy", [99]),
-			new Sequence("walkDownEnemy", [96, 97, 98, 99]),
-			new Sequence("walkUpEnemy", [100, 101, 102, 103]),
-			new Sequence("walkToRightEnemy", [104, 105, 106]),
-			new Sequence("wand", [131])
-		]));
+			new Sequence("idleHero", [51]), new Sequence("walkDownHero", [48, 49, 50, 51]), new Sequence("walkUpHero", [52, 53, 54, 55]),
+			new Sequence("walkToRightHero", [56, 57, 58]), new Sequence("idleEnemy", [99]), new Sequence("walkDownEnemy", [96, 97, 98, 99]),
+			new Sequence("walkUpEnemy", [100, 101, 102, 103]), new Sequence("walkToRightEnemy", [104, 105, 106]), new Sequence("wand", [131]),
+			new Sequence("potion", [143])]));
 		atlas.add(new SpriteSheetLoader("devil", 64, 64, 0, [
 			new Sequence("idleDevil", [11]),
 			new Sequence("walkDownDevil", [8, 9, 10, 11]),
@@ -90,6 +91,8 @@ class GameState extends State {
 		devilsCollisions = new CollisionGroup();
 		world = new Tilemap("world" + GGD.levelNumber + "_tmx", 1);
 		isWand = false;
+		isPotion = false;
+		thereAreDevils = false;
 		if (GGD.levelNumber == 3) {
 			isWand = false;
 			world.init(function(layerTilemap, tileLayer) {
@@ -100,12 +103,15 @@ class GameState extends State {
 			}, parseMapObjects);
 			stage.addChild(GGD.simulationLayer);
 			stage.defaultCamera().limits(0, 0, 512, 768);
-			hero = new Hero(225, 440, GGD.simulationLayer);
+			hero = new Hero(225, 440, GGD.simulationLayer, 1.3);
 			GGD.player = hero;
-			for (i in 0...4) {
-				var enemy:Devil = new Devil(GGD.simulationLayer, devilsCollisions);
-				addChild(enemy);
-			}
+			devil1 = new Devil(GGD.simulationLayer, devilsCollisions, 50, 200, 50, 380);
+			devil2 = new Devil(GGD.simulationLayer, devilsCollisions, 50, 200, 50, 380);
+			devil3 = new Devil(GGD.simulationLayer, devilsCollisions, 50, 200, 50, 380);
+			addChild(devil1);
+			addChild(devil2);
+			addChild(devil3);
+			thereAreDevils = true;
 		} else {
 			world.init(function(layerTilemap, tileLayer) {
 				if (!tileLayer.properties.exists("noCollision")) {
@@ -117,14 +123,16 @@ class GameState extends State {
 			stage.defaultCamera().limits(0, 0, world.widthIntTiles * 32, world.heightInTiles * 32);
 			if (GGD.levelNumber == 1) {
 				hero = new Hero(150, 900, GGD.simulationLayer);
+				potion = new Potion(150, 150, GGD.simulationLayer);
+				isPotion = true;
 			} else {
-				hero = new Hero(50, 150, GGD.simulationLayer);
+				hero = new Hero(50, 150, GGD.simulationLayer, 2);
 				wand = new Wand(800, 150, GGD.simulationLayer);
 				isWand = true;
 			}
 			GGD.player = hero;
-			for (i in 0...60) {
-				var enemy:Enemy = new Enemy(GGD.simulationLayer, enemyCollisions);
+			for (i in 0...15 * GGD.levelNumber) {
+				var enemy:Enemy = new Enemy(GGD.simulationLayer, enemyCollisions, 50, 800, 50, 700);
 				addChild(enemy);
 			}
 		}
@@ -179,6 +187,14 @@ class GameState extends State {
 		CollisionEngine.overlap(hero.gun.bulletsCollisions, enemyCollisions, bulletVsEnemy);
 		CollisionEngine.overlap(hero.gun.bulletsCollisions, devilsCollisions, bulletVsDevil);
 		CollisionEngine.overlap(hero.gun.bulletsCollisions, objects, bulletVsObjects);
+		if (thereAreDevils) {
+			CollisionEngine.overlap(devil1.gun.bulletsCollisions, hero.collision);
+			CollisionEngine.overlap(devil2.gun.bulletsCollisions, hero.collision);
+			CollisionEngine.overlap(devil3.gun.bulletsCollisions, hero.collision);
+		}
+		if (isPotion) {
+			CollisionEngine.overlap(hero.collision, potion.collider, heroVsPotion);
+		}
 		if (isWand) {
 			CollisionEngine.overlap(hero.collision, wand.collider, heroVsWand);
 		}
@@ -197,8 +213,10 @@ class GameState extends State {
 	function heroVsTransportZone(heroCollision:ICollider, transportZoneCollision:ICollider) {
 		switch (GGD.levelNumber) {
 			case 1:
-				GGD.levelNumber = GGD.levelNumber + 1;
-				changeState(new GameState());
+				if (GGD.hasPotion) {
+					GGD.levelNumber = GGD.levelNumber + 1;
+					changeState(new GameState());
+				}
 			case 2:
 				if (GGD.hasWand) {
 					GGD.levelNumber = GGD.levelNumber + 1;
@@ -213,6 +231,14 @@ class GameState extends State {
 		isWand = false;
 		this.wand.damage();
 		this.wand.die();
+	}
+
+	function heroVsPotion(heroCollision:ICollider, potionCollision:ICollider) {
+		GGD.hasPotion = true;
+		isPotion = false;
+		hero.speed = 350;
+		this.potion.damage();
+		this.potion.die();
 	}
 
 	function bulletVsEnemy(bulletCollision:ICollider, enemyCollision:ICollider) {
