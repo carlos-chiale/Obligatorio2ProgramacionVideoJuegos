@@ -141,7 +141,7 @@ class GameState extends State {
 		helpText.color = Color.Red;
 		appearHelpingTest = 0;
 
-		sounds = SM.playFx("bubble2", true);
+		sounds = SM.playFx("FinalBattle", true);
 
 		if (GGD.levelNumber == 3) {
 			isWand = false;
