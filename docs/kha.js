@@ -23148,6 +23148,9 @@ states_GameState.prototype = $extend(com_framework_utils_State.prototype,{
 		enemy.die();
 		GlobalGameData.heroLife--;
 		this.lifeText.set_text(GlobalGameData.heroLife + "");
+		if(GlobalGameData.heroLife == 0) {
+			this.changeState(new states_GameOver());
+		}
 	}
 	,heroVsDevil: function(devilCollision,heroCollision) {
 		this.changeState(new states_GameOver());
