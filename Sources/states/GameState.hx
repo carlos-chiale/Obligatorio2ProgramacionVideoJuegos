@@ -66,6 +66,9 @@ class GameState extends State {
 	var thereAreDevils:Bool;
 	var heart:Sprite;
 	var lifeText:Text;
+	var helpText:Text;
+	var isShowingHelpText:Bool;
+	var appearHelpingTest:Int;
 
 	override function load(resources:Resources) {
 		resources.add(new DataLoader("world" + GGD.levelNumber + "_tmx"));
@@ -103,7 +106,6 @@ class GameState extends State {
 		isPotion = false;
 		thereAreDevils = false;
 		stage.addChild(GGD.simulationLayer);
-
 		hudLayer = new StaticLayer();
 		stage.addChild(hudLayer);
 		heart = new Sprite("PixelArtGameAssets01");
@@ -121,6 +123,13 @@ class GameState extends State {
 		lifeText.scaleY = 2.5;
 		lifeText.color = Color.Red;
 		hudLayer.addChild(lifeText);
+
+		isShowingHelpText = false;
+		helpText = new Text("Kenney_Pixel");
+		helpText.x = 150;
+		helpText.y = 100;
+		helpText.color = Color.Red;
+		appearHelpingTest = 0;
 
 		if (GGD.levelNumber == 3) {
 			isWand = false;
@@ -185,7 +194,7 @@ class GameState extends State {
 					var house = new Zone(object.x, object.y, object.width, object.height);
 					objects.add(house.collider);
 				}
-				if(object.type == "border"){
+				if (object.type == "border") {
 					var border = new Zone(object.x, object.y, object.width, object.height);
 					borderZone.add(border.collider);
 				}
@@ -219,7 +228,6 @@ class GameState extends State {
 		CollisionEngine.collide(enemyCollisions, waterZone);
 		CollisionEngine.collide(enemyCollisions, objects);
 		CollisionEngine.collide(hero.collision, objects);
-
 		CollisionEngine.overlap(hero.gun.bulletsCollisions, devilsCollisions, bulletVsDevil);
 		CollisionEngine.overlap(hero.gun.bulletsCollisions, objects, bulletVsObjects);
 		if (thereAreDevils) {
@@ -232,6 +240,13 @@ class GameState extends State {
 		}
 		if (isWand) {
 			CollisionEngine.overlap(hero.collision, wand.collider, heroVsWand);
+		}
+		if (isShowingHelpText) {
+			appearHelpingTest--;
+			if (appearHelpingTest == 0) {
+				isShowingHelpText = false;
+				helpText.removeFromParent();
+			}
 		}
 	}
 
@@ -248,20 +263,24 @@ class GameState extends State {
 	function heroVsTransportZone(heroCollision:ICollider, transportZoneCollision:ICollider) {
 		switch (GGD.levelNumber) {
 			case 1:
-				var helpText = new Text("Kenney_Pixel");
-				helpText.text = "You need the potion first.";
-				helpText.x = 200;
-				helpText.y = 200;
-				helpText.color = Color.Red;
-				hudLayer.addChild(helpText);
 				if (GGD.hasPotion) {
 					GGD.levelNumber = GGD.levelNumber + 1;
 					changeState(new GameState());
+				} else {
+					helpText.text = "You need the potion first.";
+					hudLayer.addChild(helpText);
+					isShowingHelpText = true;
+					appearHelpingTest = 50;
 				}
 			case 2:
 				if (GGD.hasWand) {
 					GGD.levelNumber = GGD.levelNumber + 1;
 					changeState(new GameState());
+				} else {
+					helpText.text = "You need the wand first.";
+					hudLayer.addChild(helpText);
+					isShowingHelpText = true;
+					appearHelpingTest = 50;
 				}
 			default:
 		}
@@ -288,9 +307,9 @@ class GameState extends State {
 		enemy.die();
 		GGD.heroLife--;
 		lifeText.text = GGD.heroLife + "";
-		if (GGD.heroLife == 0) {
-			changeState(new GameOver());
-		}
+		// if (GGD.heroLife == 0) {
+		// 	changeState(new GameOver());
+		// }
 	}
 
 	function heroVsDevil(devilCollision:ICollider, heroCollision:ICollider) {
