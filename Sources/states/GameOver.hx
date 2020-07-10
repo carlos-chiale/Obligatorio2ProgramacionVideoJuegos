@@ -1,5 +1,6 @@
 package states;
 
+import GlobalGameData.GGD;
 import com.gEngine.display.Sprite;
 import kha.Color;
 import com.loading.basicResources.JoinAtlas;
@@ -36,12 +37,12 @@ class GameOver extends State {
 		image.x = GEngine.virtualWidth * 0.5 - image.width() * 0.5;
 		image.y = 100;
 		stage.addChild(image);
-		var scoreDisplay = new Text("KenneyThick");
-		scoreDisplay.text = "Your score is " + score;
-		scoreDisplay.x = GEngine.virtualWidth / 2 - scoreDisplay.width() * 0.5;
-		scoreDisplay.y = GEngine.virtualHeight / 2;
-		scoreDisplay.color = Color.Red;
-		stage.addChild(scoreDisplay);
+		var text = new Text("KenneyThick");
+		text.text = "Enter to play again";
+		text.x = GEngine.virtualWidth / 2 - text.width() * 0.5;
+		text.y = GEngine.virtualHeight / 2;
+		text.color = Color.Red;
+		stage.addChild(text);
 	}
 
 	var time:Float = 0;
@@ -50,6 +51,10 @@ class GameOver extends State {
 	override function update(dt:Float) {
 		super.update(dt);
 		if (Input.i.isKeyCodePressed(KeyCode.Return)) {
+			GGD.levelNumber=1;
+			GGD.heroLife=9;
+			GGD.hasWand=false;
+			GGD.hasPotion=false;
 			changeState(new GameState());
 		}
 	}

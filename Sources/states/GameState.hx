@@ -1,5 +1,6 @@
 package states;
 
+import js.lib.intl.DateTimeFormat.DateTimeFormatPartType;
 import gameObjects.Potion;
 import gameObjects.Bullet;
 import js.html.audio.WaveShaperNode;
@@ -62,6 +63,8 @@ class GameState extends State {
 	var isWand:Bool;
 	var isPotion:Bool;
 	var thereAreDevils:Bool;
+	var heart:Sprite;
+	var lifeText:Text;
 
 	override function load(resources:Resources) {
 		resources.add(new DataLoader("world" + GGD.levelNumber + "_tmx"));
@@ -81,6 +84,7 @@ class GameState extends State {
 			new Sequence("walkToRightDevil", [12, 13, 14, 15]),
 			new Sequence("walkToLeftDevil", [4, 5, 6, 7]),
 		]));
+		atlas.add(new SpriteSheetLoader("PixelArtGameAssets01", 32, 32, 0, [new Sequence("heart", [2])]));
 		atlas.add(new FontLoader("Kenney_Pixel", 24));
 		resources.add(atlas);
 	}
@@ -97,8 +101,25 @@ class GameState extends State {
 		isPotion = false;
 		thereAreDevils = false;
 		stage.addChild(GGD.simulationLayer);
+
 		hudLayer = new StaticLayer();
 		stage.addChild(hudLayer);
+		heart = new Sprite("PixelArtGameAssets01");
+		heart.timeline.playAnimation("heart");
+		heart.y = 20;
+		heart.x = 33;
+		heart.scaleX = heart.scaleY = 2;
+		heart.smooth = false;
+		hudLayer.addChild(heart);
+		lifeText = new Text("Kenney_Pixel");
+		lifeText.text = GGD.heroLife + "";
+		lifeText.x = 20;
+		lifeText.y = 20;
+		lifeText.scaleX = 2.5;
+		lifeText.scaleY = 2.5;
+		lifeText.color = Color.Red;
+		hudLayer.addChild(lifeText);
+
 		if (GGD.levelNumber == 3) {
 			isWand = false;
 			world.init(function(layerTilemap, tileLayer) {
@@ -137,7 +158,7 @@ class GameState extends State {
 				isWand = true;
 			}
 			GGD.player = hero;
-			for (i in 0...15 * GGD.levelNumber) {
+			for (i in 0...10 * GGD.levelNumber) {
 				var enemy:Enemy = new Enemy(GGD.simulationLayer, enemyCollisions, 50, 800, 50, 700);
 				addChild(enemy);
 			}
@@ -184,13 +205,14 @@ class GameState extends State {
 		super.update(dt);
 		stage.defaultCamera().setTarget(hero.x, hero.y);
 		CollisionEngine.overlap(hero.collision, transportZone, heroVsTransportZone);
-		CollisionEngine.overlap(hero.collision, enemyCollisions);
-		CollisionEngine.overlap(hero.collision, devilsCollisions);
+		CollisionEngine.overlap(hero.collision, enemyCollisions, heroVsEnemy);
+		CollisionEngine.overlap(hero.gun.bulletsCollisions, enemyCollisions, bulletVsEnemy);
+		CollisionEngine.overlap(hero.collision, devilsCollisions, heroVsDevil);
 		CollisionEngine.collide(hero.collision, waterZone);
 		CollisionEngine.collide(enemyCollisions, waterZone);
 		CollisionEngine.collide(enemyCollisions, objects);
 		CollisionEngine.collide(hero.collision, objects);
-		CollisionEngine.overlap(hero.gun.bulletsCollisions, enemyCollisions, bulletVsEnemy);
+
 		CollisionEngine.overlap(hero.gun.bulletsCollisions, devilsCollisions, bulletVsDevil);
 		CollisionEngine.overlap(hero.gun.bulletsCollisions, objects, bulletVsObjects);
 		if (thereAreDevils) {
@@ -253,9 +275,25 @@ class GameState extends State {
 		this.potion.die();
 	}
 
+	function heroVsEnemy(enemyCollision:ICollider, heroCollision:ICollider) {
+		var enemy:Enemy = cast enemyCollision.userData;
+		enemy.damage();
+		enemy.die();
+		GGD.heroLife--;
+		lifeText.text = GGD.heroLife + "";
+		if (GGD.heroLife == 0) {
+			changeState(new GameOver());
+		}
+	}
+
+	function heroVsDevil(devilCollision:ICollider, heroCollision:ICollider) {
+		changeState(new GameOver());
+	}
+
 	function bulletVsEnemy(bulletCollision:ICollider, enemyCollision:ICollider) {
 		var enemy:Enemy = cast enemyCollision.userData;
 		enemy.damage();
+		enemy.die();
 		var bullet:Bullet = cast bulletCollision.userData;
 		bullet.die();
 	}

@@ -11,6 +11,7 @@ class GlobalGameData {
     public static var levelNumber:Int=1;
     public static var hasWand:Bool=false;
     public static var hasPotion:Bool=false;
+    public static var heroLife:Int=9;
 
     public static function destroy() {
         player=null;
