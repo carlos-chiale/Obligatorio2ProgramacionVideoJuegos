@@ -291,6 +291,10 @@ class GameState extends State {
 		isWand = false;
 		this.wand.damage();
 		this.wand.die();
+		helpText.text = "Press A, for shooting.";
+		hudLayer.addChild(helpText);
+		isShowingHelpText = true;
+		appearHelpingTest = 150;
 	}
 
 	function heroVsPotion(heroCollision:ICollider, potionCollision:ICollider) {
@@ -299,6 +303,10 @@ class GameState extends State {
 		hero.speed = 350;
 		this.potion.damage();
 		this.potion.die();
+		helpText.text = "Now you run faster.";
+		hudLayer.addChild(helpText);
+		isShowingHelpText = true;
+		appearHelpingTest = 150;
 	}
 
 	function heroVsEnemy(enemyCollision:ICollider, heroCollision:ICollider) {
