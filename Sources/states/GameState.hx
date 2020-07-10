@@ -307,9 +307,9 @@ class GameState extends State {
 		enemy.die();
 		GGD.heroLife--;
 		lifeText.text = GGD.heroLife + "";
-		// if (GGD.heroLife == 0) {
-		// 	changeState(new GameOver());
-		// }
+		if (GGD.heroLife == 0) {
+			changeState(new GameOver());
+		}
 	}
 
 	function heroVsDevil(devilCollision:ICollider, heroCollision:ICollider) {
