@@ -40,6 +40,9 @@ import gameObjects.Devil;
 import gameObjects.Wand;
 import kha.Color;
 import com.gEngine.display.StaticLayer;
+import com.loading.basicResources.SoundLoader;
+import kha.audio1.AudioChannel;
+import com.soundLib.SoundManager.SM;
 
 class GameState extends State {
 	// var screenWidth:Int;
@@ -69,6 +72,7 @@ class GameState extends State {
 	var helpText:Text;
 	var isShowingHelpText:Bool;
 	var appearHelpingTest:Int;
+	var sounds:AudioChannel;
 
 	override function load(resources:Resources) {
 		resources.add(new DataLoader("world" + GGD.levelNumber + "_tmx"));
@@ -91,6 +95,12 @@ class GameState extends State {
 		atlas.add(new SpriteSheetLoader("PixelArtGameAssets01", 32, 32, 0, [new Sequence("heart", [2])]));
 		atlas.add(new FontLoader("Kenney_Pixel", 24));
 		resources.add(atlas);
+		resources.add(new SoundLoader("achievement",false));
+		resources.add(new SoundLoader("bubble2",false));
+		resources.add(new SoundLoader("FinalBattle",false));
+		resources.add(new SoundLoader("gameOver",false));
+		resources.add(new SoundLoader("swing",false));
+		resources.add(new SoundLoader("woodSmall",false));
 	}
 
 	override function init() {
@@ -131,6 +141,8 @@ class GameState extends State {
 		helpText.color = Color.Red;
 		appearHelpingTest = 0;
 
+		sounds = SM.playFx("bubble2", true);
+
 		if (GGD.levelNumber == 3) {
 			isWand = false;
 			world.init(function(layerTilemap, tileLayer) {
@@ -150,6 +162,7 @@ class GameState extends State {
 			addChild(devil2);
 			addChild(devil3);
 			thereAreDevils = true;
+			
 		} else {
 			world.init(function(layerTilemap, tileLayer) {
 				if (!tileLayer.properties.exists("noCollision")) {
