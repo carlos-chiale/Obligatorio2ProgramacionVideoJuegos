@@ -55,6 +55,7 @@ class GameState extends State {
 	var hudLayer:StaticLayer;
 	var transportZone:CollisionGroup;
 	var waterZone:CollisionGroup;
+	var borderZone:CollisionGroup;
 	var objects:CollisionGroup;
 	var enemyCollisions:CollisionGroup;
 	var devilsCollisions:CollisionGroup;
@@ -93,6 +94,7 @@ class GameState extends State {
 		GGD.simulationLayer = new Layer();
 		transportZone = new CollisionGroup();
 		waterZone = new CollisionGroup();
+		borderZone = new CollisionGroup();
 		objects = new CollisionGroup();
 		enemyCollisions = new CollisionGroup();
 		devilsCollisions = new CollisionGroup();
@@ -183,6 +185,10 @@ class GameState extends State {
 					var house = new Zone(object.x, object.y, object.width, object.height);
 					objects.add(house.collider);
 				}
+				if(object.type == "border"){
+					var border = new Zone(object.x, object.y, object.width, object.height);
+					borderZone.add(border.collider);
+				}
 			default:
 		}
 	}
@@ -209,6 +215,7 @@ class GameState extends State {
 		CollisionEngine.overlap(hero.gun.bulletsCollisions, enemyCollisions, bulletVsEnemy);
 		CollisionEngine.overlap(hero.collision, devilsCollisions, heroVsDevil);
 		CollisionEngine.collide(hero.collision, waterZone);
+		CollisionEngine.collide(hero.collision, borderZone);
 		CollisionEngine.collide(enemyCollisions, waterZone);
 		CollisionEngine.collide(enemyCollisions, objects);
 		CollisionEngine.collide(hero.collision, objects);
@@ -241,12 +248,12 @@ class GameState extends State {
 	function heroVsTransportZone(heroCollision:ICollider, transportZoneCollision:ICollider) {
 		switch (GGD.levelNumber) {
 			case 1:
-				// var helpText = new Text("Kenney_Pixel");
-				// helpText.text = "You need the potion first.";
-				// helpText.x = 200;
-				// helpText.y = 200;
-				// helpText.color = Color.Red;
-				// hudLayer.addChild(helpText);
+				var helpText = new Text("Kenney_Pixel");
+				helpText.text = "You need the potion first.";
+				helpText.x = 200;
+				helpText.y = 200;
+				helpText.color = Color.Red;
+				hudLayer.addChild(helpText);
 				if (GGD.hasPotion) {
 					GGD.levelNumber = GGD.levelNumber + 1;
 					changeState(new GameState());

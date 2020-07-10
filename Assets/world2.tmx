@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="24">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="28">
  <tileset firstgid="1" name="RPGpack" tilewidth="32" tileheight="32" tilecount="1040" columns="40">
   <image source="RPGpack.png" width="1280" height="832"/>
   <terraintypes>
@@ -177,6 +177,10 @@
   <object id="21" type="house" x="543.582" y="480.943" width="59.4543" height="45.6524"/>
   <object id="22" type="house" x="605.16" y="512.793" width="20.172" height="11.6785"/>
   <object id="23" type="house" x="524.472" y="511.732" width="18.0486" height="15.9253"/>
+  <object id="24" type="border" x="-0.985707" y="-3.94283" width="962.05" height="8.87137"/>
+  <object id="25" type="border" x="952.193" y="6.89995" width="14.7856" height="950.222"/>
+  <object id="26" type="border" x="0" y="954.165" width="953.179" height="5.91424"/>
+  <object id="27" type="border" x="-3.94283" y="5.91424" width="7.88566" height="946.279"/>
  </objectgroup>
  <layer id="5" name="Tile Layer 2" width="30" height="30">
   <data encoding="csv">
