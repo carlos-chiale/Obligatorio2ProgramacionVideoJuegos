@@ -1,5 +1,6 @@
 package gameObjects;
 
+import com.soundLib.SoundManager.SM;
 import js.html.Console;
 import com.framework.utils.Random;
 import com.framework.utils.Entity;
@@ -106,6 +107,7 @@ class Devil extends Entity {
 		if (this.life == 0) {
 			collision.removeFromParent();
 			display.removeFromParent();
+			SM.playFx("giant2");
 		}
 	}
 

@@ -1,5 +1,6 @@
 package gameObjects;
 
+import com.soundLib.SoundManager.SM;
 import js.html.audio.DistanceModelType;
 import com.framework.utils.Entity;
 import com.gEngine.display.Layer;
@@ -141,6 +142,7 @@ class Hero extends Entity {
 		if (id == XboxJoystick.A) {
 			if (value == 1 && GGD.hasWand) {
 				gun.shoot(x,y-height*0.75,direction.x,direction.y);
+				SM.playFx("swing");
 			}
 		}
 	}

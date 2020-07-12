@@ -72,7 +72,6 @@ class GameState extends State {
 	var helpText:Text;
 	var isShowingHelpText:Bool;
 	var appearHelpingTest:Int;
-	var sounds:AudioChannel;
 
 	override function load(resources:Resources) {
 		resources.add(new DataLoader("world" + GGD.levelNumber + "_tmx"));
@@ -95,12 +94,16 @@ class GameState extends State {
 		atlas.add(new SpriteSheetLoader("PixelArtGameAssets01", 32, 32, 0, [new Sequence("heart", [2])]));
 		atlas.add(new FontLoader("Kenney_Pixel", 24));
 		resources.add(atlas);
-		resources.add(new SoundLoader("achievement",false));
-		resources.add(new SoundLoader("bubble2",false));
-		resources.add(new SoundLoader("FinalBattle",false));
-		resources.add(new SoundLoader("gameOver",false));
-		resources.add(new SoundLoader("swing",false));
-		resources.add(new SoundLoader("woodSmall",false));
+		resources.add(new SoundLoader("achievement"));
+		resources.add(new SoundLoader("bubble2"));
+		resources.add(new SoundLoader("FinalBattle"));
+		resources.add(new SoundLoader("gameOver"));
+		resources.add(new SoundLoader("swing"));
+		resources.add(new SoundLoader("woodSmall"));
+		resources.add(new SoundLoader("ogre1"));
+		resources.add(new SoundLoader("mnstr7"));
+		resources.add(new SoundLoader("mnstr2"));
+		resources.add(new SoundLoader("giant2"));
 	}
 
 	override function init() {
@@ -141,10 +144,9 @@ class GameState extends State {
 		helpText.color = Color.Red;
 		appearHelpingTest = 0;
 
-		sounds = SM.playFx("FinalBattle", true);
-
 		if (GGD.levelNumber == 3) {
 			isWand = false;
+			SM.playMusic("FinalBattle");
 			world.init(function(layerTilemap, tileLayer) {
 				if (!tileLayer.properties.exists("noCollision")) {
 					layerTilemap.createCollisions(tileLayer);
@@ -162,7 +164,6 @@ class GameState extends State {
 			addChild(devil2);
 			addChild(devil3);
 			thereAreDevils = true;
-			
 		} else {
 			world.init(function(layerTilemap, tileLayer) {
 				if (!tileLayer.properties.exists("noCollision")) {
@@ -304,6 +305,7 @@ class GameState extends State {
 		isWand = false;
 		this.wand.damage();
 		this.wand.die();
+		SM.playFx("woodSmall");
 	}
 
 	function heroVsPotion(heroCollision:ICollider, potionCollision:ICollider) {
@@ -312,6 +314,7 @@ class GameState extends State {
 		hero.speed = 350;
 		this.potion.damage();
 		this.potion.die();
+		SM.playFx("bubble2");
 	}
 
 	function heroVsEnemy(enemyCollision:ICollider, heroCollision:ICollider) {
@@ -320,13 +323,18 @@ class GameState extends State {
 		enemy.die();
 		GGD.heroLife--;
 		lifeText.text = GGD.heroLife + "";
+		SM.playFx("ogre1");
 		// if (GGD.heroLife == 0) {
 		// 	changeState(new GameOver());
+		// 	SM.playFx("gameOver");
+		// SM.stopMusic(); 
 		// }
 	}
 
 	function heroVsDevil(devilCollision:ICollider, heroCollision:ICollider) {
+		SM.stopMusic();
 		changeState(new GameOver());
+		SM.playFx("gameOver");
 	}
 
 	function bulletVsEnemy(bulletCollision:ICollider, enemyCollision:ICollider) {
@@ -335,6 +343,7 @@ class GameState extends State {
 		enemy.die();
 		var bullet:Bullet = cast bulletCollision.userData;
 		bullet.die();
+		SM.playFx("mnstr7");
 	}
 
 	function bulletVsDevil(bulletCollision:ICollider, devilCollision:ICollider) {
@@ -342,6 +351,7 @@ class GameState extends State {
 		devil.damage();
 		var bullet:Bullet = cast bulletCollision.userData;
 		bullet.die();
+		SM.playFx("mnstr2");
 	}
 
 	function bulletVsObjects(bulletCollision:ICollider, objectCollision:ICollider) {
