@@ -104,6 +104,7 @@ class GameState extends State {
 		resources.add(new SoundLoader("mnstr7"));
 		resources.add(new SoundLoader("mnstr2"));
 		resources.add(new SoundLoader("giant2"));
+		resources.add(new SoundLoader("Battle", false));
 	}
 
 	override function init() {
@@ -146,6 +147,7 @@ class GameState extends State {
 
 		if (GGD.levelNumber == 3) {
 			isWand = false;
+			SM.stopMusic();
 			SM.playMusic("FinalBattle");
 			world.init(function(layerTilemap, tileLayer) {
 				if (!tileLayer.properties.exists("noCollision")) {
@@ -165,6 +167,7 @@ class GameState extends State {
 			addChild(devil3);
 			thereAreDevils = true;
 		} else {
+		
 			world.init(function(layerTilemap, tileLayer) {
 				if (!tileLayer.properties.exists("noCollision")) {
 					layerTilemap.createCollisions(tileLayer);
@@ -173,10 +176,11 @@ class GameState extends State {
 			}, parseMapObjects);
 			stage.addChild(GGD.simulationLayer);
 			stage.defaultCamera().limits(0, 0, world.widthIntTiles * 32, world.heightInTiles * 32);
+			SM.playMusic("Battle", true);
 			if (GGD.levelNumber == 1) {
 				hero = new Hero(150, 900, GGD.simulationLayer);
 				potion = new Potion(150, 150, GGD.simulationLayer);
-				isPotion = true;
+				isPotion = true;				
 			} else {
 				hero = new Hero(50, 150, GGD.simulationLayer, 2);
 				wand = new Wand(800, 150, GGD.simulationLayer);
