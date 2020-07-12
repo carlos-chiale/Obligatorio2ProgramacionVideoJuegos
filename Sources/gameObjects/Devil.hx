@@ -1,5 +1,6 @@
 package gameObjects;
 
+import com.soundLib.SoundManager.SM;
 import js.html.Console;
 import com.framework.utils.Random;
 import com.framework.utils.Entity;
@@ -54,29 +55,12 @@ class Devil extends Entity {
 	}
 
 	private function randomPos(minX:Float, maxX:Float, minY:Float, maxY:Float) {
-		// display.offsetX=-22;
-		// display.offsetY=-14;
-		// var target:Hero = GGD.player;
-		// var dirX = 1 - Math.random() * 2;
-		// var dirY = 1 - Math.random() * 2;
-		// if (dirX == 0 && dirY == 0) {
-		// 	dirX += 1;
-		// }
-		// var length = Math.sqrt(dirX * dirX + dirY * dirY);
-		// collision.x = target.x + 100 * dirX / length;
-		// collision.y = target.y + 200 * dirY / length;
 		collision.x = Random.getRandomIn(minX, maxX);
 		collision.y = Random.getRandomIn(minY, maxY);
 	}
 
 	override public function update(dt:Float):Void {
 		super.update(dt);
-		// if(display.timeline.currentAnimation=="die_"){
-		//     if(display.timeline.playing){
-		//         randomPos();
-		//     }
-		//     return;
-		// }
 		var target:Hero = GGD.player;
 		var dir:FastVector2 = new FastVector2(target.x - (collision.x + collision.width * 0.5), target.y - (collision.y + collision.height));
 		if (Math.abs(dir.x) > 5 && Math.abs(dir.y) > 5) {
@@ -100,20 +84,18 @@ class Devil extends Entity {
 	}
 
 	public function damage():Void {
-		// display.offsetY = -35;
-		// display.timeline.playAnimation("die_", false);
 		this.life--;
 		if (this.life == 0) {
 			collision.removeFromParent();
 			display.removeFromParent();
+			SM.playFx("giant2");
+			GGD.devilsKilled++;
 		}
 	}
 
 	override function render() {
 		display.x = collision.x;
 		display.y = collision.y;
-		// if (display.timeline.currentAnimation == "die_")
-		// 	return;
 		if (Math.abs(collision.velocityX) > Math.abs(collision.velocityY)) {
 			display.timeline.playAnimation("walkToRightDevil");
 			if (collision.velocityX > 0) {

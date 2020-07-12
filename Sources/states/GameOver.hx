@@ -7,7 +7,6 @@ import com.loading.basicResources.JoinAtlas;
 import com.gEngine.display.StaticLayer;
 import com.gEngine.GEngine;
 import com.gEngine.display.Text;
-// import kha.Assets;
 import com.loading.basicResources.FontLoader;
 import com.gEngine.display.Layer;
 import kha.input.KeyCode;
@@ -16,20 +15,21 @@ import kha.math.FastVector2;
 import com.loading.basicResources.ImageLoader;
 import com.loading.Resources;
 import com.framework.utils.State;
+import com.loading.basicResources.SoundLoader;
+import com.soundLib.SoundManager.SM;
 
 class GameOver extends State {
-	var score:String;
 
-	public function new(score:String = "") {
+	public function new() {
 		super();
-		this.score = score;
 	}
 
 	override function load(resources:Resources) {
 		var atlas:JoinAtlas = new JoinAtlas(1024, 1024);
 		atlas.add(new ImageLoader("gameOver"));
-		atlas.add(new FontLoader("KenneyThick", 30));
+		atlas.add(new FontLoader("KenneyThick", 30));		
 		resources.add(atlas);
+		resources.add(new SoundLoader("gameOver"));
 	}
 
 	override function init() {
@@ -43,6 +43,7 @@ class GameOver extends State {
 		text.y = GEngine.virtualHeight / 2;
 		text.color = Color.Red;
 		stage.addChild(text);
+		SM.playFx("gameOver");
 	}
 
 	var time:Float = 0;
@@ -55,6 +56,7 @@ class GameOver extends State {
 			GGD.heroLife=9;
 			GGD.hasWand=false;
 			GGD.hasPotion=false;
+			GGD.devilsKilled=0;
 			changeState(new GameState());
 		}
 	}
