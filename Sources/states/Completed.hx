@@ -1,5 +1,6 @@
 package states;
 
+import com.soundLib.SoundManager.SM;
 import GlobalGameData.GGD;
 import com.gEngine.display.Sprite;
 import kha.Color;
@@ -17,7 +18,7 @@ import com.loading.basicResources.ImageLoader;
 import com.loading.Resources;
 import com.framework.utils.State;
 
-class GameOver extends State {
+class Completed extends State {
 
 	public function new() {
 		super();
@@ -41,7 +42,7 @@ class GameOver extends State {
 		text.y = GEngine.virtualHeight / 2;
 		text.color = Color.Red;
 		stage.addChild(text);
-		SM.playFx("gameOver");
+		SM.playFx("achievement");
 	}
 
 	var time:Float = 0;

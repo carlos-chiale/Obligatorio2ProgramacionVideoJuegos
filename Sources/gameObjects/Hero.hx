@@ -45,20 +45,12 @@ class Hero extends Entity {
 		collision.x = x;
 		collision.y = y;
 		collision.userData = this;
-		
-		// collision.maxVelocityX = maxSpeed;
-		// collision.dragX = 0.9;
 		gun = new Gun();
 		addChild(gun);
 	}
 
 	override function update(dt:Float) {
 		super.update(dt);
-		// collision.velocityX=0;
-		// collision.velocityY=0;
-		// if (collision.x + collision.width > screenWidth || collision.x < 0) {
-		// 	collision.velocityX *= -50;
-		// }
 		if(collision.velocityX !=0 || collision.velocityY !=0){
 			direction.setFrom(new FastVector2(collision.velocityX,collision.velocityY));
 			direction.setFrom(direction.normalized());
@@ -76,7 +68,6 @@ class Hero extends Entity {
 		super.render();
 		display.x = collision.x;
 		display.y = collision.y;
-		// display.timeline.playAnimation("walkDown");
 		if (notWalking()) {
 			if (direction.x == 0) {
 				if (direction.y > 0) {

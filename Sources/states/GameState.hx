@@ -41,12 +41,9 @@ import gameObjects.Wand;
 import kha.Color;
 import com.gEngine.display.StaticLayer;
 import com.loading.basicResources.SoundLoader;
-import kha.audio1.AudioChannel;
 import com.soundLib.SoundManager.SM;
 
 class GameState extends State {
-	// var screenWidth:Int;
-	// var screenHeight:Int;
 	var world:Tilemap;
 	var hero:Hero;
 	var devil1:Devil;
@@ -159,15 +156,14 @@ class GameState extends State {
 			stage.defaultCamera().limits(0, 0, 512, 768);
 			hero = new Hero(225, 440, GGD.simulationLayer, 1.3);
 			GGD.player = hero;
-			devil1 = new Devil(GGD.simulationLayer, devilsCollisions, 50, 200, 50, 380);
-			devil2 = new Devil(GGD.simulationLayer, devilsCollisions, 50, 200, 50, 380);
-			devil3 = new Devil(GGD.simulationLayer, devilsCollisions, 50, 200, 50, 380);
+			devil1 = new Devil(GGD.simulationLayer, devilsCollisions, 50, 200, 50, 250);
+			devil2 = new Devil(GGD.simulationLayer, devilsCollisions, 50, 200, 50, 250);
+			devil3 = new Devil(GGD.simulationLayer, devilsCollisions, 50, 200, 50, 250);
 			addChild(devil1);
 			addChild(devil2);
 			addChild(devil3);
 			thereAreDevils = true;
 		} else {
-		
 			world.init(function(layerTilemap, tileLayer) {
 				if (!tileLayer.properties.exists("noCollision")) {
 					layerTilemap.createCollisions(tileLayer);
@@ -180,7 +176,7 @@ class GameState extends State {
 			if (GGD.levelNumber == 1) {
 				hero = new Hero(150, 900, GGD.simulationLayer);
 				potion = new Potion(150, 150, GGD.simulationLayer);
-				isPotion = true;				
+				isPotion = true;
 			} else {
 				hero = new Hero(50, 150, GGD.simulationLayer, 2);
 				wand = new Wand(800, 150, GGD.simulationLayer);
@@ -266,6 +262,10 @@ class GameState extends State {
 				helpText.removeFromParent();
 			}
 		}
+		if (GGD.devilsKilled == 1) {
+			SM.stopMusic();
+			changeState(new Completed());
+		}
 	}
 
 	override function render() {
@@ -328,17 +328,15 @@ class GameState extends State {
 		GGD.heroLife--;
 		lifeText.text = GGD.heroLife + "";
 		SM.playFx("ogre1");
-		// if (GGD.heroLife == 0) {
-		// 	changeState(new GameOver());
-		// 	SM.playFx("gameOver");
-		// SM.stopMusic(); 
-		// }
+		if (GGD.heroLife == 0) {
+			changeState(new GameOver());
+			SM.stopMusic();
+		}
 	}
 
 	function heroVsDevil(devilCollision:ICollider, heroCollision:ICollider) {
 		SM.stopMusic();
 		changeState(new GameOver());
-		SM.playFx("gameOver");
 	}
 
 	function bulletVsEnemy(bulletCollision:ICollider, enemyCollision:ICollider) {
