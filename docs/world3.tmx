@@ -56,7 +56,7 @@
 </data>
  </layer>
  <objectgroup id="2" name="Object Layer 1">
-  <object id="1" x="2.25564" y="-10.5263" width="477.444" height="18.797"/>
+  <object id="1" type="border" x="2.25564" y="-10.5263" width="477.444" height="18.797"/>
   <object id="2" type="border" x="472.18" y="8.27068" width="20.3008" height="470.677"/>
   <object id="3" type="border" x="-0.75188" y="472.18" width="474.436" height="8.27068"/>
   <object id="4" type="border" x="-0.75188" y="9.77444" width="9.02256" height="463.158"/>
