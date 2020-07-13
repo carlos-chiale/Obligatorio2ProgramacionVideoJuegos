@@ -2,7 +2,7 @@
 
 - Carlos Andrés Chiale - Nro estudiante: 153309
 
-Se desarrolla el obligatorio de acuerdo a lo pedido en la [letra](forReadme/Obligatorio2DVJ).
+Se desarrolla el obligatorio de acuerdo a lo pedido en la [letra](forReadme/Obligatorio2DVJ.pdf).
 
 Se puede acceder al juego a tráves del siguiente link: https://carlos-chiale.github.io/Obligatorio2ProgramacionVideoJuegos/
 
