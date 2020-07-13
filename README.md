@@ -13,13 +13,19 @@ Las pantallas del juego se desarrollaron utilizando tilemap en [Tiled](https://w
 
 Se crearon tres pantallas:
 - 1er nivel
+
 ![](forReadme/world1.png)
+
 - 2do nivel
+
 ![](forReadme/world2.png)
+
 - 3er nivel
+
 ![](forReadme/world3.png)
 
 Se utilizaron spritesheets para la animación del jugador, los enemigos y los objetos, por ejemplo:
+
 ![](forReadme/hero.png)
 ![](forReadme/enemy.png)
 
