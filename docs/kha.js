@@ -11446,7 +11446,7 @@ kha__$Assets_SoundList.prototype = {
 	,__class__: kha__$Assets_SoundList
 };
 var kha__$Assets_BlobList = function() {
-	this.world3_tmxDescription = { name : "world3_tmx", file_sizes : [5140], files : ["world3.tmx"], type : "blob"};
+	this.world3_tmxDescription = { name : "world3_tmx", file_sizes : [5154], files : ["world3.tmx"], type : "blob"};
 	this.world3_tmx = null;
 	this.world2_tmxDescription = { name : "world2_tmx", file_sizes : [12016], files : ["world2.tmx"], type : "blob"};
 	this.world2_tmx = null;
