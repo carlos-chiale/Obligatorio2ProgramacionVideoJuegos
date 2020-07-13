@@ -35,5 +35,5 @@ El juego también cuenta con música y efectos de sonido.
 El juego consta de tres niveles, el heroe empieza con 9 vidas.
 - En el primero es necesario esquivar enemigos, para poder tomar una poción que permitirá correr más rápido y luego tomar el camino al segundo nivel. Cada vez que un enemigo toque al jugador, se pierde una vida.
 - El segundo nivel, también hay que esquivar, esta vez más enemigos, para poder tomar una varita, con la que se puede disparar y matar a los enemigos. Luego de tener la varita, se puede entrar a la casa.
-- El terecer nivel transcurre dentro de la casa, hay tres demonios que para matarlos, hay que dispararles varias veces. En caso de que toquen al heroe, este muere automáticamente.
+- El tercer nivel transcurre dentro de la casa, hay tres demonios que para matarlos, hay que dispararles varias veces. En caso de que toquen al heroe, este muere automáticamente.
 ![](forReadme/gameplay.gif)
