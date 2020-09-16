@@ -4,7 +4,7 @@
 
 Se desarrolla el obligatorio de acuerdo a lo pedido en la [letra](forReadme/Obligatorio2DVJ.pdf).
 
-Se puede acceder al juego a tráves del siguiente link: https://carlos-chiale.github.io/Obligatorio2ProgramacionVideoJuegos/
+Se puede acceder al juego a tráves del siguiente link: https://carlonchoboy.github.io/Obligatorio2ProgramacionVideoJuegos/
 
 ## Desarrollo
 El juego se realizo con el lenguaje [Haxe](https://haxe.org/), utilizando el frameork [Kha](https://github.com/Kode/Kha) y [Khawy](https://github.com/juakob/khawy).
